@@ -1,4 +1,5 @@
-import { monomaniac, play } from "@/fonts";
+import { Navigation } from "@/components/navigation/Navigation";
+import { play } from "@/fonts";
 import type { Metadata } from "next";
 import "./globals.css";
 
@@ -18,7 +19,10 @@ export default function RootLayout({
 			<head>
 				<link rel="icon" href="/favicon.ico" sizes="any" />
 			</head>
-			<body>{children}</body>
+			<body>
+				<Navigation />
+				{children}
+			</body>
 		</html>
 	);
 }

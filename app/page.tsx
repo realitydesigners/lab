@@ -1,9 +1,14 @@
-import Image from "next/image";
+"use client";
 
-export default function Home() {
+import { monomaniac, play } from "@/fonts";
+import Spline from "@splinetool/react-spline";
+
+export default function HomePage() {
 	return (
-		<main className="flex min-h-screen flex-col items-center justify-between p-24">
-			<h1 className="text-gray-200">First commit</h1>
+		<main className="flex min-h-screen flex-col items-center justify-between">
+			<div className="w-full block h-screen  overflow-hidden">
+				<Spline scene="https://prod.spline.design/iKmFxJxXHvp6KcMb/scene.splinecode" />
+			</div>
 		</main>
 	);
 }
