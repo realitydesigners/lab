@@ -26,7 +26,7 @@ export function Navigation() {
 		{ href: "#", label: "Contact", icon: "lock" },
 	];
 
-	const getIcon = (name: string) => {
+	const getIcon = (name) => {
 		const icons = {
 			logo: (
 				// biome-ignore lint/a11y/noSvgWithoutTitle: <explanation>
