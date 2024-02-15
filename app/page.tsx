@@ -1,5 +1,4 @@
 "use client";
-
 import { monomaniac, play } from "@/fonts";
 import Spline from "@splinetool/react-spline";
 

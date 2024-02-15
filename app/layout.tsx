@@ -1,5 +1,6 @@
+import { Footer } from "@/components/navigation/Footer";
 import { Navigation } from "@/components/navigation/Navigation";
-import { play } from "@/fonts";
+import { play, space } from "@/fonts";
 import type { Metadata } from "next";
 import "./globals.css";
 
@@ -15,13 +16,14 @@ export default function RootLayout({
 	children: React.ReactNode;
 }) {
 	return (
-		<html lang="en" className={`${play.className} bg-black`}>
+		<html lang="en" className={`${space.className} bg-black`}>
 			<head>
 				<link rel="icon" href="/favicon.ico" sizes="any" />
 			</head>
 			<body>
 				<Navigation />
 				{children}
+				<Footer />
 			</body>
 		</html>
 	);
