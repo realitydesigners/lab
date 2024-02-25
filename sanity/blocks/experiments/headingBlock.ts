@@ -1,6 +1,5 @@
 import { defineField } from "sanity";
-import categoryType from "../schemas/category";
-import teamType from "../schemas/team";
+import tagType from "../../schemas/tag";
 
 export default {
 	type: "object",
@@ -29,14 +28,7 @@ export default {
 			title: "Subheading",
 			type: "text",
 		},
-		defineField({
-			name: "publicationDate",
-			title: "Publication Date",
-			type: "date",
-			options: {
-				dateFormat: "DD-MM-YYYY",
-			},
-		}),
+
 		defineField({
 			type: "image",
 			name: "image",
@@ -44,34 +36,12 @@ export default {
 			options: {
 				hotspot: true,
 			},
-			fields: [
-				{
-					name: "alt",
-					title: "Alt Text",
-					type: "string",
-				},
-			],
 		}),
 		defineField({
-			name: "team",
-			title: "Team",
-			type: "reference",
-			to: [{ type: teamType.name }],
-		}),
-		defineField({
-			name: "tags",
-			title: "Tags",
+			name: "subcategories",
+			title: "Subcategories",
 			type: "array",
-			of: [{ type: "string" }],
-			options: {
-				layout: "tags",
-			},
-		}),
-		defineField({
-			name: "category",
-			title: "Meta Category",
-			type: "reference",
-			to: [{ type: categoryType.name }],
+			of: [{ type: "reference", to: [{ type: tagType.name }] }],
 		}),
 	],
 	preview: {

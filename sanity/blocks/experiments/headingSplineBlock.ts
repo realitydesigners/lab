@@ -1,6 +1,6 @@
 import { defineField } from "sanity";
-import categoryType from "../schemas/category";
-import teamType from "../schemas/team";
+import categoryType from "../../schemas/tag";
+import teamType from "../../schemas/team";
 
 export default {
 	type: "object",
