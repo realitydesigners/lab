@@ -5,7 +5,6 @@ import {
 	headingSplineBlock,
 	imageCanvasBlock,
 	splineBlock,
-	teamBlock,
 } from "@/sanity/blocks/experiments/index";
 import { apiVersion, dataset, projectId, studioUrl } from "@/sanity/lib/api";
 import {
@@ -53,7 +52,6 @@ export default defineConfig({
 			fileBlock,
 			headingSplineBlock,
 			contentBlock,
-			teamBlock,
 			imageCanvasBlock,
 		],
 	},

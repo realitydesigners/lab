@@ -30,10 +30,7 @@ export default defineType({
 					type: "contentBlock",
 					title: "Content",
 				},
-				{
-					type: "teamBlock",
-					title: "Team",
-				},
+
 				{
 					title: "Image Canvas",
 					type: "imageCanvasBlock",
