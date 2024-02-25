@@ -19,20 +19,18 @@ export default defineType({
 			type: "array",
 			of: [
 				{
-					type: "headingBlock",
-					title: "Heading",
+					type: "splineBlock",
+					title: "Spline Block",
+				},
+				{
+					type: "fileBlock",
+					title: "GLTF File Block",
 				},
 				{
 					type: "contentBlock",
-					title: "Content",
+					title: "Content Block",
 				},
 			],
-		}),
-		defineField({
-			name: "subcategories",
-			title: "Subcategories",
-			type: "array",
-			of: [{ type: "reference", to: { type: "category" } }],
 		}),
 	],
 	preview: {

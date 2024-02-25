@@ -10,7 +10,7 @@ import { defineField } from "sanity";
 export default {
 	type: "object",
 	name: "contentBlock",
-	title: "Content",
+	title: "Case Study",
 	fields: [
 		defineField({
 			name: "layout",
@@ -43,8 +43,6 @@ export default {
 						{ title: "H2", value: "h2" },
 						{ title: "H3", value: "h3" },
 						{ title: "H4", value: "h4" },
-						{ title: "H5", value: "h5" },
-						{ title: "H6", value: "h6" },
 					],
 					marks: {
 						annotations: [
@@ -284,51 +282,6 @@ export default {
 					},
 				}),
 
-				defineField({
-					type: "object",
-					name: "audioRef",
-					icon: PlayIcon,
-					title: "Audio",
-					preview: {
-						select: {
-							title: "audio.title",
-							className: "className",
-						},
-						prepare(selection) {
-							const { title, className } = selection;
-							const classNameTitles = {
-								"class-1": "Audio | Style 1",
-								"class-2": "Audio | Style 2",
-							};
-							const classNameTitle =
-								classNameTitles[className] || "No class selected";
-
-							return {
-								title: title || "Untitled",
-								subtitle: classNameTitle,
-							};
-						},
-					},
-					fields: [
-						defineField({
-							type: "reference",
-							name: "audio",
-							title: "Audio File",
-							to: [{ type: "audio" }],
-						}),
-						{
-							name: "className",
-							title: "CSS Class",
-							type: "string",
-							options: {
-								list: [
-									{ title: "Audio | Style 1", value: "class-1" },
-									{ title: "Audio | Style 2", value: "class-2" },
-								],
-							},
-						},
-					],
-				}),
 				defineField({
 					type: "image",
 					icon: ImageIcon,

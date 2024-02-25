@@ -1,13 +1,14 @@
 import {
 	contentBlock,
+	fileBlock,
 	headingBlock,
 	headingSplineBlock,
 	imageCanvasBlock,
+	splineBlock,
 	teamBlock,
 } from "@/sanity/blocks/experiments/index";
 import { apiVersion, dataset, projectId, studioUrl } from "@/sanity/lib/api";
 import {
-	audio,
 	category,
 	experiment,
 	img,
@@ -40,7 +41,6 @@ export default defineConfig({
 		types: [
 			posts,
 			img,
-			audio,
 			video,
 			quote,
 			team,
@@ -49,6 +49,8 @@ export default defineConfig({
 			model,
 			tags,
 			headingBlock,
+			splineBlock,
+			fileBlock,
 			headingSplineBlock,
 			contentBlock,
 			teamBlock,
