@@ -157,7 +157,7 @@ export function Navigation() {
 				<div className="pl-[2.3em] w-full justify-center relative flex items-center z-10">
 					<Link
 						href="/"
-						className={`${monomaniac.className} text-gray-200 items-center pt-2 pb-2  flex flex-row`}
+						className="text-gray-200 items-center pt-2 pb-2  flex flex-row"
 						onClick={closeNav}
 					>
 						<div className=" left-2 absolute ">{getIcon("logo")}</div>
@@ -202,7 +202,7 @@ export function Navigation() {
 								<li key={label} className="flex items-center">
 									<Link
 										href={href}
-										className={`${monomaniac.className} w-full justify-center text-left h-full text-gray-200 text-4xl lg:text-7xl backdrop-blur-[20px] bg-black/10 uppercase font-bold p-4 transition-all duration-200 ease-in-out border border-gray-600/25 block hover:bg-white hover:text-black flex items-center`}
+										className="w-full justify-center text-left h-full text-gray-200 text-4xl lg:text-7xl backdrop-blur-[20px] bg-black/10 uppercase font-bold p-4 transition-all duration-200 ease-in-out border border-gray-600/25 block hover:bg-white hover:text-black flex items-center"
 										onClick={closeNav}
 									>
 										<div className="min-w-10 min-h-10 mr-6 flex items-center justify-center">

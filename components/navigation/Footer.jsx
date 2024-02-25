@@ -144,10 +144,7 @@ export function Footer() {
 		<>
 			<div className="flex flex-col lg:flex-row gap-4  w-full p-4 ">
 				<div className="lg:w-1/4 w-full h-full flex  justify-center items-center">
-					<Link
-						href="/"
-						className={`${monomaniac.className} text-gray-200 items-center  flex flex-col `}
-					>
+					<Link href="/" className="text-gray-200 items-center  flex flex-col">
 						<div className=" ">{getIcon("logo")}</div>
 						<div className=" justify-center items-center flex h-auto flex-col">
 							<span className="text-lg font-bold tracking-wide leading-none">
@@ -171,7 +168,7 @@ export function Footer() {
 						<li key={label} className="flex items-center">
 							<Link
 								href={href}
-								className={`${monomaniac.className} w-full justify-center text-left text-gray-200 text-2xl lg:text-4xl backdrop-blur-[20px] bg-black/10 uppercase font-bold p-4 transition-all duration-200 ease-in-out border border-gray-600/25 block hover:bg-white hover:text-black flex items-center`}
+								className="w-full justify-center text-left text-gray-200 text-2xl lg:text-4xl backdrop-blur-[20px] bg-black/10 uppercase font-bold p-4 transition-all duration-200 ease-in-out border border-gray-600/25 block hover:bg-white hover:text-black flex items-center"
 								onClick={closeNav}
 							>
 								<div className="min-w-10 min-h-10 mr-6 flex items-center justify-center">
