@@ -1,5 +1,4 @@
 import { defineField } from "sanity";
-import teamType from "../../schemas/team";
 
 export default {
 	type: "object",
@@ -17,18 +16,11 @@ export default {
 				],
 			},
 		}),
-
 		defineField({
 			name: "image",
 			title: "Image",
 			type: "reference",
 			to: [{ type: "img" }],
-		}),
-		defineField({
-			name: "team",
-			title: "Team",
-			type: "reference",
-			to: [{ type: teamType.name }],
 		}),
 	],
 	preview: {

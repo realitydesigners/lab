@@ -26,7 +26,6 @@ export default defineType({
 			options: {
 				source: "title",
 			},
-			validation: (rule) => rule.required(),
 		}),
 		defineField({
 			name: "url",
@@ -65,12 +64,7 @@ export default defineType({
 			description:
 				"Alternative text for screenreaders. Falls back on caption if not set",
 		}),
-		defineField({
-			name: "team",
-			title: "Team",
-			type: "reference",
-			to: { type: "team" },
-		}),
+
 		defineField({
 			name: "subcategories",
 			title: "Subcategories",
@@ -100,10 +94,6 @@ export default defineType({
 				{
 					type: "contentBlock",
 					title: "Content",
-				},
-				{
-					type: "teamBlock",
-					title: "Team",
 				},
 			],
 		}),

@@ -15,7 +15,6 @@ import {
 	posts,
 	quote,
 	tags,
-	team,
 	video,
 } from "@/sanity/schemas";
 import CustomItem from "@/sanity/ui/CustomItem";
@@ -42,7 +41,6 @@ export default defineConfig({
 			img,
 			video,
 			quote,
-			team,
 			category,
 			experiment,
 			model,

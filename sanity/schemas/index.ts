@@ -1,5 +1,4 @@
 export { default as posts } from "@/sanity/schemas/posts";
-export { default as team } from "@/sanity/schemas/team";
 export { default as category } from "@/sanity/schemas/category";
 export { default as img } from "@/sanity/schemas/img";
 export { default as quote } from "@/sanity/schemas/quote";

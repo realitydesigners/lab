@@ -1,6 +1,5 @@
 import { defineField } from "sanity";
 import categoryType from "../../schemas/tag";
-import teamType from "../../schemas/team";
 
 export default {
 	type: "object",
@@ -58,12 +57,7 @@ export default {
 				},
 			],
 		}),
-		defineField({
-			name: "team",
-			title: "Team",
-			type: "reference",
-			to: [{ type: teamType.name }],
-		}),
+
 		defineField({
 			name: "tags",
 			title: "Tags",
