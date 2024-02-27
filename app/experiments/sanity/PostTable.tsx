@@ -101,7 +101,7 @@ const PostTable: React.FC<PostTableProps> = ({ posts }) => {
                             </p>
                         </div>
 
-                        {/* <form className="bg-gray-200 " onSubmit={handleSubmit}>
+                        <form className="bg-gray-200 " onSubmit={handleSubmit}>
                             <input
                                 type="hidden"
                                 name="postId"
@@ -116,7 +116,7 @@ const PostTable: React.FC<PostTableProps> = ({ posts }) => {
                                 onChange={(e) => setEditedTitle(e.target.value)}
                             />
                             <button type="submit">Save Changes</button>
-                        </form> */}
+                        </form>
                     </>
                 ) : (
                     <p className="text-gray-400">
