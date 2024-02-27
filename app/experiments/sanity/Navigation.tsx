@@ -1,28 +1,40 @@
-// Navigation.tsx
+"use client";
+import { useRouter } from "next/navigation";
 import React from "react";
 
 interface NavigationProps {
-    onSelect: (selected: string) => void; // Callback function to handle selection
+	initialSelection: string;
+	togglePostsVisibility: () => void; // Add this prop
 }
 
-const Navigation: React.FC<NavigationProps> = ({ onSelect }) => {
-    return (
-        <div className="flex space-x-4 bg-gray-800 p-4">
-            {/* biome-ignore lint/a11y/useButtonType: <explanation> */}
-            <button onClick={() => onSelect("posts")} className="text-white">
-                Posts
-            </button>
-            {/* biome-ignore lint/a11y/useButtonType: <explanation> */}
-            <button onClick={() => onSelect("images")} className="text-white">
-                Images
-            </button>
-            {/* biome-ignore lint/a11y/useButtonType: <explanation> */}
-            <button onClick={() => onSelect("videos")} className="text-white">
-                Videos
-            </button>
-            {/* Add more navigation buttons as needed */}
-        </div>
-    );
+const Navigation: React.FC<NavigationProps> = ({
+	initialSelection,
+	togglePostsVisibility,
+}) => {
+	const router = useRouter();
+
+	const onSelect = (selected: string) => {
+		router.push(`/experiments/sanity/?selection=${selected}`);
+	};
+
+	return (
+		<div className=" flex space-x-4 bg-black p-4">
+			{/* biome-ignore lint/a11y/useButtonType: <explanation> */}
+			<button
+				onClick={() => onSelect("posts")}
+				className=" rounded-xl border border-gray-600/50 p-4 text-gray-600"
+			>
+				Posts
+			</button>
+			{/* biome-ignore lint/a11y/useButtonType: <explanation> */}
+			<button
+				onClick={togglePostsVisibility}
+				className=" rounded-xl border border-gray-600/50 p-4 text-gray-600"
+			>
+				Posts
+			</button>
+		</div>
+	);
 };
 
 export default Navigation;
