@@ -1,6 +1,6 @@
 "use client";
 import React, { useState } from "react";
-import { PostsPayload } from "./types"; // Adjust the import path as necessary
+import { PostsPayload } from "./types";
 
 interface PostTableProps {
 	posts: PostsPayload[];
@@ -30,13 +30,12 @@ const PostTable: React.FC<PostTableProps> = ({ posts }) => {
 			<div className="w-1/2 flex-col p-6">
 				{selectedPost && (
 					<div className="rounded-xl border border-gray-700 p-4">
-						<h2 className="text-3xl font-bold capitalize text-gray-200">
+						<h2 className="text-4xl font-bold capitalize text-gray-200">
 							{selectedPost.block?.[0]?.heading}
 						</h2>
-						<p className="text-lg font-bold text-gray-400">
+						<p className="text-xl font-bold text-gray-400">
 							{selectedPost.block?.[0]?.subheading}
 						</p>
-						{/* Add more content details from selectedPost here */}
 					</div>
 				)}
 				{!selectedPost && (
