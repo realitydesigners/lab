@@ -72,6 +72,7 @@ export interface BlockItem extends BaseItem {
 export interface PostsPayload extends BaseItem {
 	publicationDate?: string;
 	excerpt?: string;
+
 	image?: Image;
 	block?: Array<BlockItem>;
 	content?: PortableTextBlock[];

@@ -72,6 +72,22 @@ const DataTable = <T extends PostsPayload | CategoryPayload>({
                                 : (item as CategoryPayload).title ||
                                   "No Heading"}
                         </div>
+                        <div className="text-md p-2 text-gray-400">
+                            {itemType === "post"
+                                ? (item as PostsPayload).block?.[0]
+                                      ?.publicationDate || "No Date"
+                                : (item as CategoryPayload)._createdAt ||
+                                  "No Date"}
+                        </div>
+                        <div className="text-md p-2 text-gray-400">
+                            {itemType === "post"
+                                ? (item as PostsPayload).slug?.current ||
+                                  "No Date"
+                                : (item as CategoryPayload).slug?.current ||
+                                  "No Date"}
+                        </div>
+
+                        {/* Add more fields as needed */}
                     </div>
                 ))}
             </div>
@@ -85,12 +101,28 @@ const DataTable = <T extends PostsPayload | CategoryPayload>({
                                 : (selectedItem as CategoryPayload).title ||
                                   "No Heading"}
                         </h2>
-                        {itemType === "post" && (
-                            <p className="text-xl font-bold text-gray-400">
-                                {(selectedItem as PostsPayload).block?.[0]
-                                    ?.subheading || "No Subheading"}
-                            </p>
-                        )}
+                        <h2 className="text-xl font-bold capitalize text-gray-400">
+                            {itemType === "post"
+                                ? (selectedItem as PostsPayload).block?.[0]
+                                      ?.subheading || "No Heading"
+                                : (selectedItem as CategoryPayload).title ||
+                                  "No Heading"}
+                        </h2>
+                        <p className="text-md font-bold text-gray-400">
+                            {itemType === "post"
+                                ? (selectedItem as PostsPayload).block?.[0]
+                                      ?.publicationDate || "No Date"
+                                : (selectedItem as CategoryPayload)
+                                      ._createdAt || "No Date"}
+                        </p>
+                        <p className="text-md font-bold text-gray-400">
+                            {itemType === "post"
+                                ? (selectedItem as PostsPayload).slug
+                                      ?.current || "No Slug"
+                                : (selectedItem as CategoryPayload).slug
+                                      ?.current || "No Slug"}
+                        </p>
+                        {/* Add more details fields as needed */}
                     </div>
                 )}
                 {!selectedItem && (

@@ -55,6 +55,7 @@ export const feedQuery = groq`
 export const postsQuery = groq`
  *[_type == "posts"] | order(_createdAt desc)[0..40] {
     slug,
+    _createdAt,
     subcategories[]->{
      ...,
      name,
@@ -155,6 +156,7 @@ export const categoryQuery = groq`
 *[_type == "category"] {
    _id,
    _type,
+   _createdAt,
    title,
    isMain,
    slug,
