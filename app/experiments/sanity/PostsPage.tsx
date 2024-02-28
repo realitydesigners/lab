@@ -13,6 +13,11 @@ interface DataTableProps<T> {
     itemType: "post" | "categories";
 }
 
+interface DataFieldsProps<T> {
+    item: T;
+    itemType: "post" | "categories";
+}
+
 const ContentPage: React.FC<ContentPageProps> = ({ posts, categories }) => {
     const [selectedContentType, setSelectedContentType] = useState("");
 
@@ -48,6 +53,19 @@ const ContentPage: React.FC<ContentPageProps> = ({ posts, categories }) => {
 };
 
 export default ContentPage;
+const DataTableHeader: React.FC = () => (
+    <div className="flex w-full border-b border-gray-700">
+        <div className="text-md p-2 font-bold uppercase tracking-wide text-gray-200">
+            Heading
+        </div>
+        <div className="text-md p-2 font-bold uppercase tracking-wide text-gray-200">
+            Publication Date
+        </div>
+        <div className="text-md p-2 font-bold uppercase tracking-wide text-gray-200">
+            Slug
+        </div>
+    </div>
+);
 
 const DataTable = <T extends PostsPayload | CategoryPayload>({
     data,
@@ -56,8 +74,9 @@ const DataTable = <T extends PostsPayload | CategoryPayload>({
     const [selectedItem, setSelectedItem] = useState<T | null>(null);
 
     return (
-        <div className="flex h-full">
-            <div className="flex w-1/2 flex-col p-4">
+        <div className="flex h-full p-12">
+            <div className="flex w-3/4 flex-col p-4">
+                <DataTableHeader />
                 {data.map((item) => (
                     // biome-ignore lint/a11y/useKeyWithClickEvents: <explanation>
                     <div
@@ -65,68 +84,18 @@ const DataTable = <T extends PostsPayload | CategoryPayload>({
                         className="flex w-full cursor-pointer border-b border-gray-700 hover:bg-gray-700/50"
                         onClick={() => setSelectedItem(item)}
                     >
-                        <div className="text-md p-2 font-bold uppercase tracking-wide text-gray-200">
-                            {itemType === "post"
-                                ? (item as PostsPayload).block?.[0]?.heading ||
-                                  "No Heading"
-                                : (item as CategoryPayload).title ||
-                                  "No Heading"}
-                        </div>
-                        <div className="text-md p-2 text-gray-400">
-                            {itemType === "post"
-                                ? (item as PostsPayload).block?.[0]
-                                      ?.publicationDate || "No Date"
-                                : (item as CategoryPayload)._createdAt ||
-                                  "No Date"}
-                        </div>
-                        <div className="text-md p-2 text-gray-400">
-                            {itemType === "post"
-                                ? (item as PostsPayload).slug?.current ||
-                                  "No Date"
-                                : (item as CategoryPayload).slug?.current ||
-                                  "No Date"}
-                        </div>
-
-                        {/* Add more fields as needed */}
+                        <DataFields item={item} itemType={itemType} />
                     </div>
                 ))}
             </div>
-            <div className="flex w-1/2 flex-col p-6">
+            <div className="flex w-1/4 flex-col p-6">
                 {selectedItem && (
                     <div className="rounded-xl border border-gray-700 p-4">
-                        <h2 className="text-4xl font-bold capitalize text-gray-200">
-                            {itemType === "post"
-                                ? (selectedItem as PostsPayload).block?.[0]
-                                      ?.heading || "No Heading"
-                                : (selectedItem as CategoryPayload).title ||
-                                  "No Heading"}
-                        </h2>
-                        <h2 className="text-xl font-bold capitalize text-gray-400">
-                            {itemType === "post"
-                                ? (selectedItem as PostsPayload).block?.[0]
-                                      ?.subheading || "No Heading"
-                                : (selectedItem as CategoryPayload).title ||
-                                  "No Heading"}
-                        </h2>
-                        <p className="text-md font-bold text-gray-400">
-                            {itemType === "post"
-                                ? (selectedItem as PostsPayload).block?.[0]
-                                      ?.publicationDate || "No Date"
-                                : (selectedItem as CategoryPayload)
-                                      ._createdAt || "No Date"}
-                        </p>
-                        <p className="text-md font-bold text-gray-400">
-                            {itemType === "post"
-                                ? (selectedItem as PostsPayload).slug
-                                      ?.current || "No Slug"
-                                : (selectedItem as CategoryPayload).slug
-                                      ?.current || "No Slug"}
-                        </p>
-                        {/* Add more details fields as needed */}
+                        <CurrentItem item={selectedItem} itemType={itemType} />
                     </div>
                 )}
                 {!selectedItem && (
-                    <p className="w-1/2 text-gray-400">
+                    <p className="w-1/4 text-gray-400">
                         Select an item to see its details.
                     </p>
                 )}
@@ -134,3 +103,85 @@ const DataTable = <T extends PostsPayload | CategoryPayload>({
         </div>
     );
 };
+
+const FieldItem: React.FC<{ label: string; value?: string }> = ({ value }) => (
+    <div className="text-md p-2">
+        <span className="text-gray-400">{value || "No Data"}</span>
+    </div>
+);
+
+const DataFields = <T extends PostsPayload | CategoryPayload>({
+    item,
+    itemType,
+}: DataFieldsProps<T>) => {
+    let heading: string | undefined;
+    let publicationDate: string | undefined;
+    let slug: string | undefined;
+
+    switch (itemType) {
+        case "post":
+            heading = (item as PostsPayload).block?.[0]?.heading;
+            publicationDate = (item as PostsPayload).block?.[0]
+                ?.publicationDate;
+            slug = (item as PostsPayload).slug?.current;
+            break;
+        case "categories":
+            heading = (item as CategoryPayload).title;
+            publicationDate = (item as CategoryPayload)._createdAt;
+            slug = (item as CategoryPayload).slug?.current;
+            break;
+        default:
+            break;
+    }
+
+    return (
+        <>
+            <FieldItem label="Heading" value={heading} />
+            <FieldItem label="Publication Date" value={publicationDate} />
+            <FieldItem label="Slug" value={slug} />
+        </>
+    );
+};
+
+const CurrentItem = <T extends PostsPayload | CategoryPayload>({
+    item,
+    itemType,
+}: DataFieldsProps<T>) => {
+    let heading: string | undefined;
+    let publicationDate: string | undefined;
+    let slug: string | undefined;
+
+    switch (itemType) {
+        case "post":
+            heading = (item as PostsPayload).block?.[0]?.heading;
+            publicationDate = (item as PostsPayload).block?.[0]
+                ?.publicationDate;
+            slug = (item as PostsPayload).slug?.current;
+            break;
+        case "categories":
+            heading = (item as CategoryPayload).title;
+            publicationDate = (item as CategoryPayload)._createdAt;
+            slug = (item as CategoryPayload).slug?.current;
+            break;
+        default:
+            break;
+    }
+
+    return (
+        <div className="flex flex-col gap-2">
+            <FieldWithLabel label="Heading" value={heading} />
+            <FieldWithLabel label="Publication Date" value={publicationDate} />
+            <FieldWithLabel label="Slug" value={slug} />
+        </div>
+    );
+};
+
+const FieldWithLabel: React.FC<{ label: string; value?: string }> = ({
+    label,
+    value,
+}) => (
+    <div className="flex flex-col">
+        <span className="text-sm text-gray-400">{label}:</span>
+        <span className="p-2 text-2xl text-gray-200">{value || "No Data"}</span>
+    </div>
+);
