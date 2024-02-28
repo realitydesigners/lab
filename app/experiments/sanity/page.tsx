@@ -9,14 +9,14 @@ export default async function Page() {
         tags: ["posts"],
     });
 
-    const category: CategoryPayload[] = await sanityFetch({
+    const categories: CategoryPayload[] = await sanityFetch({
         query: categoryQuery,
         tags: ["category"],
     });
 
     return (
         <main className="flex min-h-screen w-full flex-col items-center justify-center bg-black">
-            <ContentPage posts={posts} category={category} />
+            <ContentPage posts={posts} categories={categories} />
         </main>
     );
 }
