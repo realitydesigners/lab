@@ -10,12 +10,12 @@ interface ContentPageProps {
 
 interface DataTableProps<T> {
     data: T[];
-    itemType: "post" | "categories";
+    itemType: "posts" | "categories";
 }
 
 interface DataFieldsProps<T> {
     item: T;
-    itemType: "post" | "categories";
+    itemType: "posts" | "categories";
 }
 
 const ContentPage: React.FC<ContentPageProps> = ({ posts, categories }) => {
@@ -40,7 +40,7 @@ const ContentPage: React.FC<ContentPageProps> = ({ posts, categories }) => {
                 onSelectContentType={onSelectContentType}
             />
             {selectedContentType === "posts" && (
-                <DataTable<PostsPayload> data={posts} itemType="post" />
+                <DataTable<PostsPayload> data={posts} itemType="posts" />
             )}
             {selectedContentType === "categories" && (
                 <DataTable<CategoryPayload>
@@ -53,15 +53,16 @@ const ContentPage: React.FC<ContentPageProps> = ({ posts, categories }) => {
 };
 
 export default ContentPage;
+
 const DataTableHeader: React.FC = () => (
     <div className="flex w-full border-b border-gray-700">
-        <div className="text-md p-2 font-bold uppercase tracking-wide text-gray-200">
+        <div className="w-1/4 p-2 font-bold uppercase tracking-wide text-gray-200">
             Heading
         </div>
-        <div className="text-md p-2 font-bold uppercase tracking-wide text-gray-200">
+        <div className="w-1/4 p-2 font-bold uppercase tracking-wide text-gray-200">
             Publication Date
         </div>
-        <div className="text-md p-2 font-bold uppercase tracking-wide text-gray-200">
+        <div className="w-1/4 p-2 font-bold uppercase tracking-wide text-gray-200">
             Slug
         </div>
     </div>
@@ -104,12 +105,6 @@ const DataTable = <T extends PostsPayload | CategoryPayload>({
     );
 };
 
-const FieldItem: React.FC<{ label: string; value?: string }> = ({ value }) => (
-    <div className="text-md p-2">
-        <span className="text-gray-400">{value || "No Data"}</span>
-    </div>
-);
-
 const DataFields = <T extends PostsPayload | CategoryPayload>({
     item,
     itemType,
@@ -119,7 +114,7 @@ const DataFields = <T extends PostsPayload | CategoryPayload>({
     let slug: string | undefined;
 
     switch (itemType) {
-        case "post":
+        case "posts":
             heading = (item as PostsPayload).block?.[0]?.heading;
             publicationDate = (item as PostsPayload).block?.[0]
                 ?.publicationDate;
@@ -135,11 +130,17 @@ const DataFields = <T extends PostsPayload | CategoryPayload>({
     }
 
     return (
-        <>
-            <FieldItem label="Heading" value={heading} />
-            <FieldItem label="Publication Date" value={publicationDate} />
-            <FieldItem label="Slug" value={slug} />
-        </>
+        <div className="flex w-full">
+            <div className="w-1/4 p-2">
+                <span className="capitalize text-gray-400">{heading}</span>
+            </div>
+            <div className="w-1/4 p-2">
+                <span className="text-gray-400">{publicationDate}</span>
+            </div>
+            <div className="w-1/4 p-2">
+                <span className="text-gray-400">/{slug}</span>
+            </div>
+        </div>
     );
 };
 
@@ -152,7 +153,7 @@ const CurrentItem = <T extends PostsPayload | CategoryPayload>({
     let slug: string | undefined;
 
     switch (itemType) {
-        case "post":
+        case "posts":
             heading = (item as PostsPayload).block?.[0]?.heading;
             publicationDate = (item as PostsPayload).block?.[0]
                 ?.publicationDate;
