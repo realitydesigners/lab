@@ -69,6 +69,8 @@ export const postsQuery = groq`
        tags,
        layout,
        title,
+        category->,
+        layout,
        publicationDate,
       team->{
        ...,

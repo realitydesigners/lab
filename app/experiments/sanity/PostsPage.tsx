@@ -1,4 +1,5 @@
 "use client";
+import { category } from "@/sanity/schemas";
 import React, { useState } from "react";
 import Navigation from "./Navigation";
 import { CategoryPayload, PostsPayload } from "./types";
@@ -54,10 +55,12 @@ const ContentPage: React.FC<ContentPageProps> = ({ posts, categories }) => {
 
 export default ContentPage;
 
-const DataTableHeader: React.FC = () => (
+const DataTableHeader: React.FC<{ itemType: "posts" | "categories" }> = ({
+    itemType,
+}) => (
     <div className="flex w-full border-b border-gray-700">
         <div className="w-1/4 p-2 font-bold uppercase tracking-wide text-gray-200">
-            Heading
+            {itemType === "posts" ? "Heading" : "Title"}
         </div>
         <div className="w-1/4 p-2 font-bold uppercase tracking-wide text-gray-200">
             Publication Date
@@ -65,6 +68,11 @@ const DataTableHeader: React.FC = () => (
         <div className="w-1/4 p-2 font-bold uppercase tracking-wide text-gray-200">
             Slug
         </div>
+        {itemType === "posts" && (
+            <div className="w-1/4 p-2 font-bold uppercase tracking-wide text-gray-200">
+                Category
+            </div>
+        )}
     </div>
 );
 
@@ -77,7 +85,7 @@ const DataTable = <T extends PostsPayload | CategoryPayload>({
     return (
         <div className="flex h-full p-12">
             <div className="flex w-3/4 flex-col p-4">
-                <DataTableHeader />
+                <DataTableHeader itemType={itemType} />
                 {data.map((item) => (
                     // biome-ignore lint/a11y/useKeyWithClickEvents: <explanation>
                     <div
@@ -112,6 +120,7 @@ const DataFields = <T extends PostsPayload | CategoryPayload>({
     let heading: string | undefined;
     let publicationDate: string | undefined;
     let slug: string | undefined;
+    let categoryName: string | undefined;
 
     switch (itemType) {
         case "posts":
@@ -119,7 +128,10 @@ const DataFields = <T extends PostsPayload | CategoryPayload>({
             publicationDate = (item as PostsPayload).block?.[0]
                 ?.publicationDate;
             slug = (item as PostsPayload).slug?.current;
+            categoryName =
+                (item as PostsPayload).block?.[0]?.category?.title || undefined;
             break;
+
         case "categories":
             heading = (item as CategoryPayload).title;
             publicationDate = (item as CategoryPayload)._createdAt;
@@ -130,7 +142,7 @@ const DataFields = <T extends PostsPayload | CategoryPayload>({
     }
 
     return (
-        <div className="flex w-full">
+        <div className="flex w-full text-sm">
             <div className="w-1/4 p-2">
                 <span className="capitalize text-gray-400">{heading}</span>
             </div>
@@ -140,6 +152,13 @@ const DataFields = <T extends PostsPayload | CategoryPayload>({
             <div className="w-1/4 p-2">
                 <span className="text-gray-400">/{slug}</span>
             </div>
+            {itemType === "posts" && categoryName && (
+                <div className="w-1/4 p-2">
+                    <span className="whitespace-nowrap rounded-md bg-gray-600/25 px-2 py-1 font-bold uppercase text-gray-400 hover:bg-gray-600/50">
+                        {categoryName}
+                    </span>
+                </div>
+            )}
         </div>
     );
 };
@@ -151,6 +170,7 @@ const CurrentItem = <T extends PostsPayload | CategoryPayload>({
     let heading: string | undefined;
     let publicationDate: string | undefined;
     let slug: string | undefined;
+    let categoryName: string | undefined;
 
     switch (itemType) {
         case "posts":
@@ -158,6 +178,8 @@ const CurrentItem = <T extends PostsPayload | CategoryPayload>({
             publicationDate = (item as PostsPayload).block?.[0]
                 ?.publicationDate;
             slug = (item as PostsPayload).slug?.current;
+            categoryName =
+                (item as PostsPayload).block?.[0]?.category?.title || undefined;
             break;
         case "categories":
             heading = (item as CategoryPayload).title;
@@ -173,6 +195,9 @@ const CurrentItem = <T extends PostsPayload | CategoryPayload>({
             <FieldWithLabel label="Heading" value={heading} />
             <FieldWithLabel label="Publication Date" value={publicationDate} />
             <FieldWithLabel label="Slug" value={slug} />
+            {itemType === "posts" && categoryName && (
+                <FieldWithLabel label="Category" value={categoryName} />
+            )}
         </div>
     );
 };

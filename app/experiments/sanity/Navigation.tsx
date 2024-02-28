@@ -22,7 +22,7 @@ const Navigation: React.FC<NavigationProps> = ({
                 <button
                     key={contentType}
                     onClick={() => handleSelect(contentType)}
-                    className="rounded-xl border border-gray-600/50 p-4 text-gray-200"
+                    className="rounded-xl border  border-gray-700 p-4 text-gray-200 hover:bg-gray-700/50"
                 >
                     {contentType.charAt(0).toUpperCase() + contentType.slice(1)}
                 </button>

@@ -53,6 +53,7 @@ export interface BlockItem extends BaseItem {
 	image?: Image;
 	tags?: string[];
 	layout?: string;
+	category?: string;
 	publicationDate?: string;
 	team?: TeamMember;
 	media?: any;
@@ -72,11 +73,11 @@ export interface BlockItem extends BaseItem {
 export interface PostsPayload extends BaseItem {
 	publicationDate?: string;
 	excerpt?: string;
-
 	image?: Image;
 	block?: Array<BlockItem>;
 	content?: PortableTextBlock[];
 	ogImage?: Image;
+	category?: Array;
 }
 
 export interface CategoryPayload extends BaseItem {
