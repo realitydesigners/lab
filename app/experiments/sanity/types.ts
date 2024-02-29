@@ -78,7 +78,6 @@ export interface PostsPayload extends BaseItem {
 	block?: Array<BlockItem>;
 	content?: PortableTextBlock[];
 	ogImage?: Image;
-	category?: Array;
 }
 
 export interface CategoryPayload extends BaseItem {
