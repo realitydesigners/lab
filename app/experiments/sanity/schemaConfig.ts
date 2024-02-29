@@ -4,7 +4,7 @@ const categoryStyles = {
 	Spirituality: "bg-purple-400 border border-purple-300 border-2 ",
 };
 
-export const schemaConfig = {
+export const oldschemaConfig = {
 	posts: [
 		{ key: "block[0].heading", label: "Heading" },
 		{ key: "block[0].publicationDate", label: "Publication Date" },

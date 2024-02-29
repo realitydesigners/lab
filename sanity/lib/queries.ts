@@ -156,8 +156,7 @@ export const postsBySlugQuery = groq`
 
 export const categoryQuery = groq`
 *[_type == "category"] {
-   _id,
-   _type,
+  
    _createdAt,
    title,
    isMain,
@@ -216,7 +215,7 @@ export const categoryBySlugQuery = groq`
   }
   `;
 
-export const getVideosQuery = groq`
+export const videosQuery = groq`
 *[_type == "video"][0..30] |  order(_createdAt desc) {
  title,
  slug,
