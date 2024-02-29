@@ -1,6 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import Navigation from "./Navigation";
+import PostsChart from "./PostsChart";
 import { getNestedValue, schemaConfig } from "./schemaConfig";
 
 // biome-ignore lint/suspicious/noExplicitAny: <explanation>
@@ -35,6 +36,9 @@ const ContentPage: React.FC<{ posts: any[]; categories: any[] }> = ({
                 ]}
                 onSelectContentType={onSelectContentType}
             />
+            <div className="h-[400px] w-full py-6">
+                <PostsChart posts={posts} />
+            </div>
             <DynamicTable schemaType={selectedContentType} data={data} />
         </main>
     );

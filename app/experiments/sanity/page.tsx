@@ -14,7 +14,7 @@ export default async function Page() {
         tags: ["category"],
     });
 
-    console.log(posts, categories);
+    // console.log(posts, categories);
 
     return <ContentPage posts={posts} categories={categories} />;
 }
