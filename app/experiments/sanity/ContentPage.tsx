@@ -19,33 +19,48 @@ const ContentPage = ({ posts, categories, videos }) => {
     const data = getDataForContentType(selectedContentType, allData);
 
     return (
-        <main className="flex min-h-screen w-full flex-col items-center px-[120px]">
+        <div className="flex min-h-screen w-full flex-col items-center px-[120px]">
             <Navigation
                 initialSelection={selectedContentType}
-                contentTypes={Object.keys(allData)} // Dynamically generate content types from allData keys
+                contentTypes={Object.keys(allData)}
                 onSelectContentType={onSelectContentType}
             />
             <div className="h-[400px] w-full py-6">
                 <PostsChart posts={posts} />
             </div>
             <DynamicTable data={data} />
-        </main>
+        </div>
     );
 };
 const DynamicTable = ({ data }) => {
     const [selectedItem, setSelectedItem] = useState(null);
     const fields = data.length > 0 ? Object.keys(data[0]) : [];
+    const fieldWidthPercentage = 100 / fields.length;
 
+    // Function to handle row click
+    const handleRowClick = (item) => {
+        setSelectedItem(item); // Update selectedItem state when a row is clicked
+    };
     return (
-        <div className="flex w-full rounded-[1em] border border-gray-700 p-6">
-            <div className="flex w-3/4 flex-col">
-                <div className="flex w-full border-b border-gray-700">
+        <div className="flex w-full overflow-x-auto rounded-[1em] border border-gray-700 p-6">
+            <div className="flex w-full flex-col rounded-[1em] border border-gray-700 p-2">
+                <div className="flex w-full min-w-max ">
                     {fields.map((field) => (
                         <div
                             key={field}
-                            className="w-1/4 p-2 font-bold uppercase tracking-wide text-gray-200"
+                            className="p-1 font-bold uppercase tracking-wide text-gray-200"
+                            style={{
+                                width: `${fieldWidthPercentage}%`,
+                                minWidth: "300px",
+                                maxWidth: "300px",
+                            }}
                         >
-                            {fieldLabels[field] || field}{" "}
+                            <div className="h-full overflow-x-auto whitespace-nowrap rounded-md border border-gray-700/50  p-2">
+                                {/* biome-ignore lint/suspicious/noPrototypeBuiltins: <explanation> */}
+                                {fieldLabels?.hasOwnProperty(field)
+                                    ? fieldLabels[field]
+                                    : field}
+                            </div>
                         </div>
                     ))}
                 </div>
@@ -54,28 +69,36 @@ const DynamicTable = ({ data }) => {
                     <div
                         // biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
                         key={index}
-                        className="flex w-full cursor-pointer border-b border-gray-700 hover:bg-gray-700/50"
-                        onClick={() => setSelectedItem(item)}
+                        className="flex w-full min-w-max cursor-pointer  hover:bg-gray-700/5"
+                        onClick={() => handleRowClick(item)}
                     >
                         {fields.map((field) => (
                             <div
                                 key={field}
-                                className="w-1/4 p-2 text-sm text-gray-400"
+                                className=" p-1 text-sm text-gray-400"
+                                style={{
+                                    width: `${fieldWidthPercentage}%`,
+                                    minWidth: "300px",
+                                    maxWidth: "300px",
+                                }}
                             >
-                                {renderFieldValue(item, field)}
+                                <div className="h-full overflow-x-auto whitespace-nowrap rounded-md  border  border-gray-700/25  p-2">
+                                    {renderFieldValue(item, field)}
+                                </div>
                             </div>
                         ))}
                     </div>
                 ))}
             </div>
             {selectedItem && (
-                <div className="w-1/4 rounded-xl border border-gray-700 p-4">
+                <div className=" ml-4 min-w-[500px] rounded-xl border border-gray-700 p-4">
                     <CurrentItem item={selectedItem} />
                 </div>
             )}
         </div>
     );
 };
+
 const CurrentItem = ({ item }) => {
     const fields = item ? Object.keys(item) : [];
 
@@ -93,7 +116,7 @@ const CurrentItem = ({ item }) => {
                         <span className="py-2 text-xs text-gray-400">
                             {label}:
                         </span>
-                        <span className="rounded-xl p-2 text-xs font-bold uppercase text-gray-200">
+                        <span className="rounded-xl p-2 text-2xl font-bold uppercase text-gray-200">
                             {content}
                         </span>
                     </div>
