@@ -22,7 +22,7 @@ const ContentPage: React.FC<{ posts: any[]; categories: any[] }> = ({
               : [];
 
     return (
-        <main className="flex min-h-screen w-full flex-col items-center bg-black">
+        <main className="flex min-h-screen w-full flex-col items-center bg-gray-900/10 px-[120px]">
             <Navigation
                 initialSelection={selectedContentType}
                 contentTypes={[
@@ -51,7 +51,7 @@ const DynamicTable: React.FC<{ schemaType: string; data: any[] }> = ({
     const fieldsConfig = schemaConfig[schemaType] || [];
 
     return (
-        <div className="flex w-full p-12">
+        <div className="flex w-full ">
             <div className="flex w-3/4 flex-col">
                 <div className="flex w-full border-b border-gray-700">
                     {fieldsConfig.map((field) => (
