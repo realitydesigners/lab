@@ -1,166 +1,140 @@
 "use client";
 import React, { useState } from "react";
 import Navigation from "./Navigation";
-
-const schemaConfig = {
-	posts: [
-		{ key: "block[0].heading", label: "Heading" },
-		{ key: "block[0].publicationDate", label: "Publication Date" },
-		{
-			key: "slug.current",
-			label: "Slug",
-			formatter: (value) => `/${value}`,
-		},
-		{ key: "block[0].category.title", label: "Category" },
-	],
-	categories: [
-		{ key: "title", label: "Title" },
-		{ key: "_createdAt", label: "Created At" },
-		{
-			key: "slug.current",
-			label: "Slug",
-			formatter: (value) => `/${value}`,
-		},
-	],
-};
-
-const getNestedValue = (obj, path) => {
-	return path.split(".").reduce((acc, part) => {
-		if (acc === "N/A" || acc === null || acc === undefined) return "N/A"; // Return early for 'N/A', null, or undefined
-
-		const [key, index] = part.split(/\[|\]/).filter(Boolean);
-		const nextAcc = acc instanceof Object ? acc[key] : undefined; // Only attempt access if acc is an object
-
-		if (index !== undefined) {
-			return Array.isArray(nextAcc) && index < nextAcc.length
-				? nextAcc[parseInt(index, 10)]
-				: "N/A";
-		}
-
-		return nextAcc !== undefined ? nextAcc : "N/A";
-	}, obj);
-};
+import { getNestedValue, schemaConfig } from "./schemaConfig";
 
 // biome-ignore lint/suspicious/noExplicitAny: <explanation>
 const ContentPage: React.FC<{ posts: any[]; categories: any[] }> = ({
-	posts,
-	categories,
+    posts,
+    categories,
 }) => {
-	const [selectedContentType, setSelectedContentType] = useState<string>("");
+    const [selectedContentType, setSelectedContentType] = useState<string>("");
 
-	const onSelectContentType = (contentType: string) => {
-		setSelectedContentType(contentType);
-	};
+    const onSelectContentType = (contentType: string) => {
+        setSelectedContentType(contentType);
+    };
 
-	const data =
-		selectedContentType === "posts"
-			? posts
-			: selectedContentType === "categories"
-			  ? categories
-			  : [];
+    const data =
+        selectedContentType === "posts"
+            ? posts
+            : selectedContentType === "categories"
+              ? categories
+              : [];
 
-	return (
-		<main className="flex min-h-screen w-full flex-col items-center bg-black">
-			<Navigation
-				initialSelection={selectedContentType}
-				contentTypes={[
-					"posts",
-					"categories",
-					"videos",
-					"images",
-					"quotes",
-					"animations",
-				]}
-				onSelectContentType={onSelectContentType}
-			/>
-			<DynamicTable schemaType={selectedContentType} data={data} />
-		</main>
-	);
+    return (
+        <main className="flex min-h-screen w-full flex-col items-center bg-black">
+            <Navigation
+                initialSelection={selectedContentType}
+                contentTypes={[
+                    "posts",
+                    "categories",
+                    "videos",
+                    "images",
+                    "quotes",
+                    "animations",
+                ]}
+                onSelectContentType={onSelectContentType}
+            />
+            <DynamicTable schemaType={selectedContentType} data={data} />
+        </main>
+    );
 };
 
 // biome-ignore lint/suspicious/noExplicitAny: <explanation>
 const DynamicTable: React.FC<{ schemaType: string; data: any[] }> = ({
-	schemaType,
-	data,
+    schemaType,
+    data,
 }) => {
-	// biome-ignore lint/suspicious/noExplicitAny: <explanation>
-	const [selectedItem, setSelectedItem] = useState<any | null>(null);
+    // biome-ignore lint/suspicious/noExplicitAny: <explanation>
+    const [selectedItem, setSelectedItem] = useState<any | null>(null);
 
-	const fieldsConfig = schemaConfig[schemaType] || [];
+    const fieldsConfig = schemaConfig[schemaType] || [];
 
-	return (
-		<div className="flex w-full p-12">
-			<div className="flex w-3/4 flex-col">
-				<div className="flex w-full border-b border-gray-700">
-					{fieldsConfig.map((field) => (
-						<div
-							key={field.key}
-							className="w-1/4 p-2 font-bold uppercase tracking-wide text-gray-200"
-						>
-							{field.label}
-						</div>
-					))}
-				</div>
-				{data.map((item, index) => (
-					// biome-ignore lint/a11y/useKeyWithClickEvents: <explanation>
-					<div
-						// biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
-						key={index}
-						className="flex w-full cursor-pointer border-b border-gray-700 hover:bg-gray-700/50"
-						onClick={() => setSelectedItem(item)} // Set the selected item on click
-					>
-						{fieldsConfig.map((field) => (
-							<div key={field.key} className="w-1/4 p-2 text-sm text-gray-400">
-								{field.formatter
-									? field.formatter(
-											getNestedValue(
-												item,
-												field.key.replace(/\[(\d+)\]/, ".$1"),
-											),
-									  )
-									: getNestedValue(item, field.key.replace(/\[(\d+)\]/, ".$1"))}
-							</div>
-						))}
-					</div>
-				))}
-			</div>
+    return (
+        <div className="flex w-full p-12">
+            <div className="flex w-3/4 flex-col">
+                <div className="flex w-full border-b border-gray-700">
+                    {fieldsConfig.map((field) => (
+                        <div
+                            key={field.key}
+                            className="w-1/4 p-2 font-bold uppercase tracking-wide text-gray-200"
+                        >
+                            {field.label}
+                        </div>
+                    ))}
+                </div>
+                {data.map((item, index) => (
+                    // biome-ignore lint/a11y/useKeyWithClickEvents: <explanation>
+                    <div
+                        // biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
+                        key={index}
+                        className="flex w-full cursor-pointer border-b border-gray-700 hover:bg-gray-700/50"
+                        onClick={() => setSelectedItem(item)} // Set the selected item on click
+                    >
+                        {fieldsConfig.map((field) => (
+                            <div
+                                key={field.key}
+                                className="w-1/4 p-2 text-sm text-gray-400"
+                            >
+                                {field.formatter
+                                    ? field.formatter(
+                                          getNestedValue(
+                                              item,
+                                              field.key.replace(
+                                                  /\[(\d+)\]/,
+                                                  ".$1",
+                                              ),
+                                          ),
+                                      )
+                                    : getNestedValue(
+                                          item,
+                                          field.key.replace(/\[(\d+)\]/, ".$1"),
+                                      )}
+                            </div>
+                        ))}
+                    </div>
+                ))}
+            </div>
 
-			{selectedItem && (
-				<div className="flex w-1/4 flex-col rounded-lg p-4">
-					<CurrentItem item={selectedItem} schemaType={schemaType} />
-				</div>
-			)}
-		</div>
-	);
+            {selectedItem && (
+                <div className="flex w-1/4 flex-col rounded-lg p-4">
+                    <CurrentItem item={selectedItem} schemaType={schemaType} />
+                </div>
+            )}
+        </div>
+    );
 };
 
 // biome-ignore lint/suspicious/noExplicitAny: <explanation>
 const CurrentItem: React.FC<{ item: any; schemaType: string }> = ({
-	item,
-	schemaType,
+    item,
+    schemaType,
 }) => {
-	const fieldsConfig = schemaConfig[schemaType] || [];
+    const fieldsConfig = schemaConfig[schemaType] || [];
 
-	return (
-		<div className="rounded-xl border border-gray-700 p-4">
-			{fieldsConfig.map((field) => (
-				<FieldWithLabel
-					key={field.key}
-					label={field.label}
-					value={getNestedValue(item, field.key.replace(/\[(\d+)\]/, ".$1"))}
-				/>
-			))}
-		</div>
-	);
+    return (
+        <div className="rounded-xl border border-gray-700 p-4">
+            {fieldsConfig.map((field) => (
+                <FieldWithLabel
+                    key={field.key}
+                    label={field.label}
+                    value={getNestedValue(
+                        item,
+                        field.key.replace(/\[(\d+)\]/, ".$1"),
+                    )}
+                />
+            ))}
+        </div>
+    );
 };
 const FieldWithLabel: React.FC<{ label: string; value?: string }> = ({
-	label,
-	value,
+    label,
+    value,
 }) => (
-	<div className="mb-4 flex flex-col">
-		<span className="text-sm text-gray-400">{label}:</span>
-		<span className="p-2 text-lg text-gray-200">{value || "No Data"}</span>
-	</div>
+    <div className="mb-4 flex flex-col">
+        <span className="text-sm text-gray-400">{label}:</span>
+        <span className="p-2 text-lg text-gray-200">{value || "No Data"}</span>
+    </div>
 );
 
 export default ContentPage;
