@@ -1,22 +1,25 @@
+const categoryStyles = {
+	"Consciousness Exploration": "bg-red-400 border border-red-300 border-2 ",
+	"Self Development": "bg-teal-400 border border-teal-300 border-2 ",
+	Spirituality: "bg-purple-400 border border-purple-300 border-2 ",
+};
+
 export const schemaConfig = {
 	posts: [
 		{ key: "block[0].heading", label: "Heading" },
 		{ key: "block[0].publicationDate", label: "Publication Date" },
+		{ key: "slug.current", label: "Slug" },
 		{
-			key: "slug.current",
-			label: "Slug",
-			formatter: (value) => `/${value}`,
+			key: "block[0].category.title",
+			label: "Category",
+			getCategoryStyle: (category) =>
+				categoryStyles[category] || "default-style", // Function t
 		},
-		{ key: "block[0].category.title", label: "Category" },
 	],
 	categories: [
 		{ key: "title", label: "Title" },
 		{ key: "_createdAt", label: "Created At" },
-		{
-			key: "slug.current",
-			label: "Slug",
-			formatter: (value) => `/${value}`,
-		},
+		{ key: "slug.current", label: "Slug" },
 	],
 };
 

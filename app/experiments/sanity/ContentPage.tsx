@@ -23,7 +23,7 @@ const ContentPage: React.FC<{ posts: any[]; categories: any[] }> = ({
               : [];
 
     return (
-        <main className="flex min-h-screen w-full flex-col items-center bg-gray-900/10 px-[120px]">
+        <main className="flex min-h-screen w-full flex-col items-center px-[120px]">
             <Navigation
                 initialSelection={selectedContentType}
                 contentTypes={[
@@ -51,11 +51,10 @@ const DynamicTable: React.FC<{ schemaType: string; data: any[] }> = ({
 }) => {
     // biome-ignore lint/suspicious/noExplicitAny: <explanation>
     const [selectedItem, setSelectedItem] = useState<any | null>(null);
-
     const fieldsConfig = schemaConfig[schemaType] || [];
 
     return (
-        <div className="flex w-full ">
+        <div className="flex w-full rounded-[1em] border border-gray-700 p-6">
             <div className="flex w-3/4 flex-col">
                 <div className="flex w-full border-b border-gray-700">
                     {fieldsConfig.map((field) => (
@@ -73,33 +72,37 @@ const DynamicTable: React.FC<{ schemaType: string; data: any[] }> = ({
                         // biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
                         key={index}
                         className="flex w-full cursor-pointer border-b border-gray-700 hover:bg-gray-700/50"
-                        onClick={() => setSelectedItem(item)} // Set the selected item on click
+                        onClick={() => setSelectedItem(item)}
                     >
-                        {fieldsConfig.map((field) => (
-                            <div
-                                key={field.key}
-                                className="w-1/4 p-2 text-sm text-gray-400"
-                            >
-                                {field.formatter
-                                    ? field.formatter(
-                                          getNestedValue(
-                                              item,
-                                              field.key.replace(
-                                                  /\[(\d+)\]/,
-                                                  ".$1",
-                                              ),
-                                          ),
-                                      )
-                                    : getNestedValue(
-                                          item,
-                                          field.key.replace(/\[(\d+)\]/, ".$1"),
-                                      )}
-                            </div>
-                        ))}
+                        {fieldsConfig.map((field) => {
+                            const fieldValue = getNestedValue(
+                                item,
+                                field.key.replace(/\[(\d+)\]/, ".$1"),
+                            );
+                            // Check if the field is a category field and apply getCategoryStyle if available
+                            const isCategoryField =
+                                field.key.includes("category.title");
+                            const baseClass = "w-1/4 p-2 text-sm";
+                            const categoryClass =
+                                isCategoryField && field.getCategoryStyle
+                                    ? field.getCategoryStyle(fieldValue)
+                                    : "text-gray-400";
+                            const additionalClass = isCategoryField
+                                ? "rounded-xl text-black font-bold uppercase  flex justify-center items-center"
+                                : ""; // Conditionally add rounded-xl for category fields
+
+                            return (
+                                <div
+                                    key={field.key}
+                                    className={`${baseClass} ${categoryClass} ${additionalClass}`}
+                                >
+                                    {fieldValue}
+                                </div>
+                            );
+                        })}
                     </div>
                 ))}
             </div>
-
             {selectedItem && (
                 <div className="flex w-1/4 flex-col rounded-lg p-4">
                     <CurrentItem item={selectedItem} schemaType={schemaType} />
@@ -119,25 +122,42 @@ const CurrentItem: React.FC<{ item: any; schemaType: string }> = ({
     return (
         <div className="rounded-xl border border-gray-700 p-4">
             {fieldsConfig.map((field) => (
-                <FieldWithLabel
+                <CurrentItemFields
                     key={field.key}
                     label={field.label}
                     value={getNestedValue(
                         item,
                         field.key.replace(/\[(\d+)\]/, ".$1"),
                     )}
+                    className={
+                        field.key === "block[0].category.title" &&
+                        field.getCategoryStyle
+                            ? field.getCategoryStyle(
+                                  getNestedValue(
+                                      item,
+                                      field.key.replace(/\[(\d+)\]/, ".$1"),
+                                  ),
+                              )
+                            : ""
+                    }
                 />
             ))}
         </div>
     );
 };
-const FieldWithLabel: React.FC<{ label: string; value?: string }> = ({
-    label,
-    value,
-}) => (
-    <div className="mb-4 flex flex-col">
-        <span className="text-sm text-gray-400">{label}:</span>
-        <span className="p-2 text-lg text-gray-200">{value || "No Data"}</span>
+
+const CurrentItemFields: React.FC<{
+    label: string;
+    value?: string;
+    className?: string; // className now applies to the value
+}> = ({ label, value, className }) => (
+    <div className="flex flex-col p-2">
+        <span className="py-2 text-xs text-gray-400">{label}:</span>
+        <span
+            className={`${className ? `${className} rounded-xl p-2 text-xs font-bold uppercase text-black` : "rounded-xl text-xl font-bold uppercase text-gray-200"}`}
+        >
+            {value || "No Data"}
+        </span>
     </div>
 );
 

@@ -4,17 +4,17 @@ import ContentPage from "./ContentPage";
 import { CategoryPayload, PostsPayload } from "./types";
 
 export default async function Page() {
-    const posts: PostsPayload[] = await sanityFetch({
-        query: postsQuery,
-        tags: ["posts"],
-    });
+	const posts: PostsPayload[] = await sanityFetch({
+		query: postsQuery,
+		tags: ["posts"],
+	});
 
-    const categories: CategoryPayload[] = await sanityFetch({
-        query: categoryQuery,
-        tags: ["category"],
-    });
+	const categories: CategoryPayload[] = await sanityFetch({
+		query: categoryQuery,
+		tags: ["category"],
+	});
 
-    // console.log(posts, categories);
+	// console.log(posts, categories);
 
-    return <ContentPage posts={posts} categories={categories} />;
+	return <ContentPage posts={posts} categories={categories} />;
 }
