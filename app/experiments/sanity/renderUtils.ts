@@ -51,6 +51,13 @@ export const fieldLabels = {
 	_createdAt: "Created",
 };
 
+export const fieldOrder = {
+	posts: ["block", "_createdAt", "slug", "subcategories", "model"],
+	categories: ["title", "_createdAt", "slug"],
+	videos: ["title", "_createdAt", "model", "subcategories", "image", "video"],
+	// Add other content types as needed
+};
+
 // Function to get data based on the selected content type
 export const getDataForContentType = (selectedContentType, allData) => {
 	switch (selectedContentType) {
