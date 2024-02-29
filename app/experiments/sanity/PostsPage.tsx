@@ -2,179 +2,165 @@
 import React, { useState } from "react";
 import Navigation from "./Navigation";
 
-// Simplified component props with `any` type for posts and categories
+const schemaConfig = {
+	posts: [
+		{ key: "block[0].heading", label: "Heading" },
+		{ key: "block[0].publicationDate", label: "Publication Date" },
+		{
+			key: "slug.current",
+			label: "Slug",
+			formatter: (value) => `/${value}`,
+		},
+		{ key: "block[0].category.title", label: "Category" },
+	],
+	categories: [
+		{ key: "title", label: "Title" },
+		{ key: "_createdAt", label: "Created At" },
+		{
+			key: "slug.current",
+			label: "Slug",
+			formatter: (value) => `/${value}`,
+		},
+	],
+};
+
+const getNestedValue = (obj, path) => {
+	return path.split(".").reduce((acc, part) => {
+		if (acc === "N/A" || acc === null || acc === undefined) return "N/A"; // Return early for 'N/A', null, or undefined
+
+		const [key, index] = part.split(/\[|\]/).filter(Boolean);
+		const nextAcc = acc instanceof Object ? acc[key] : undefined; // Only attempt access if acc is an object
+
+		if (index !== undefined) {
+			return Array.isArray(nextAcc) && index < nextAcc.length
+				? nextAcc[parseInt(index, 10)]
+				: "N/A";
+		}
+
+		return nextAcc !== undefined ? nextAcc : "N/A";
+	}, obj);
+};
+
+// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 const ContentPage: React.FC<{ posts: any[]; categories: any[] }> = ({
-    posts,
-    categories,
+	posts,
+	categories,
 }) => {
-    const [selectedContentType, setSelectedContentType] = useState<string>("");
+	const [selectedContentType, setSelectedContentType] = useState<string>("");
 
-    const onSelectContentType = (contentType: string) => {
-        setSelectedContentType(contentType);
-    };
+	const onSelectContentType = (contentType: string) => {
+		setSelectedContentType(contentType);
+	};
 
-    return (
-        <main className="flex min-h-screen w-full flex-col items-center bg-black">
-            <Navigation
-                initialSelection={selectedContentType}
-                contentTypes={[
-                    "posts",
-                    "categories",
-                    "videos",
-                    "images",
-                    "quotes",
-                    "animations",
-                ]}
-                onSelectContentType={onSelectContentType}
-            />
-            {selectedContentType === "posts" && (
-                <DataTable data={posts} itemType="posts" />
-            )}
-            {selectedContentType === "categories" && (
-                <DataTable data={categories} itemType="categories" />
-            )}
-        </main>
-    );
+	const data =
+		selectedContentType === "posts"
+			? posts
+			: selectedContentType === "categories"
+			  ? categories
+			  : [];
+
+	return (
+		<main className="flex min-h-screen w-full flex-col items-center bg-black">
+			<Navigation
+				initialSelection={selectedContentType}
+				contentTypes={[
+					"posts",
+					"categories",
+					"videos",
+					"images",
+					"quotes",
+					"animations",
+				]}
+				onSelectContentType={onSelectContentType}
+			/>
+			<DynamicTable schemaType={selectedContentType} data={data} />
+		</main>
+	);
 };
 
-const DataTable: React.FC<{ data: any[]; itemType: string }> = ({
-    data,
-    itemType,
+// biome-ignore lint/suspicious/noExplicitAny: <explanation>
+const DynamicTable: React.FC<{ schemaType: string; data: any[] }> = ({
+	schemaType,
+	data,
 }) => {
-    const [selectedItem, setSelectedItem] = useState<any | null>(null);
+	// biome-ignore lint/suspicious/noExplicitAny: <explanation>
+	const [selectedItem, setSelectedItem] = useState<any | null>(null);
 
-    return (
-        <div className="flex h-full p-12">
-            <div className="flex w-3/4 flex-col p-4">
-                <DataTableHeader itemType={itemType} />
-                {data.map((item, index) => (
-                    <div
-                        key={index}
-                        className="flex w-full cursor-pointer border-b border-gray-700 hover:bg-gray-700/50"
-                        onClick={() => setSelectedItem(item)}
-                    >
-                        <DataFields item={item} itemType={itemType} />
-                    </div>
-                ))}
-            </div>
-            <div className="flex w-1/4 flex-col p-6">
-                {selectedItem && (
-                    <div className="rounded-xl border border-gray-700 p-4">
-                        <CurrentItem item={selectedItem} itemType={itemType} />
-                    </div>
-                )}
-                {!selectedItem && (
-                    <p className="w-1/4 text-gray-400">
-                        Select an item to see its details.
-                    </p>
-                )}
-            </div>
-        </div>
-    );
+	const fieldsConfig = schemaConfig[schemaType] || [];
+
+	return (
+		<div className="flex w-full p-12">
+			<div className="flex w-3/4 flex-col">
+				<div className="flex w-full border-b border-gray-700">
+					{fieldsConfig.map((field) => (
+						<div
+							key={field.key}
+							className="w-1/4 p-2 font-bold uppercase tracking-wide text-gray-200"
+						>
+							{field.label}
+						</div>
+					))}
+				</div>
+				{data.map((item, index) => (
+					// biome-ignore lint/a11y/useKeyWithClickEvents: <explanation>
+					<div
+						// biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
+						key={index}
+						className="flex w-full cursor-pointer border-b border-gray-700 hover:bg-gray-700/50"
+						onClick={() => setSelectedItem(item)} // Set the selected item on click
+					>
+						{fieldsConfig.map((field) => (
+							<div key={field.key} className="w-1/4 p-2 text-sm text-gray-400">
+								{field.formatter
+									? field.formatter(
+											getNestedValue(
+												item,
+												field.key.replace(/\[(\d+)\]/, ".$1"),
+											),
+									  )
+									: getNestedValue(item, field.key.replace(/\[(\d+)\]/, ".$1"))}
+							</div>
+						))}
+					</div>
+				))}
+			</div>
+
+			{selectedItem && (
+				<div className="flex w-1/4 flex-col rounded-lg p-4">
+					<CurrentItem item={selectedItem} schemaType={schemaType} />
+				</div>
+			)}
+		</div>
+	);
 };
 
-const DataTableHeader: React.FC<{ itemType: string }> = ({ itemType }) => (
-    <div className="flex w-full border-b border-gray-700">
-        <div className="w-1/4 p-2 font-bold uppercase tracking-wide text-gray-200">
-            {itemType === "posts" ? "Heading" : "Title"}
-        </div>
-        <div className="w-1/4 p-2 font-bold uppercase tracking-wide text-gray-200">
-            Publication Date
-        </div>
-        <div className="w-1/4 p-2 font-bold uppercase tracking-wide text-gray-200">
-            Slug
-        </div>
-        {itemType === "posts" && (
-            <div className="w-1/4 p-2 font-bold uppercase tracking-wide text-gray-200">
-                Category
-            </div>
-        )}
-    </div>
-);
-
-const DataFields: React.FC<{ item: any; itemType: string }> = ({
-    item,
-    itemType,
+// biome-ignore lint/suspicious/noExplicitAny: <explanation>
+const CurrentItem: React.FC<{ item: any; schemaType: string }> = ({
+	item,
+	schemaType,
 }) => {
-    let heading = "N/A";
-    let publicationDate = "N/A";
-    let slug = "N/A";
-    let categoryName = "N/A";
+	const fieldsConfig = schemaConfig[schemaType] || [];
 
-    if (itemType === "posts") {
-        heading = item.block[0]?.heading || "N/A";
-        publicationDate = item.block[0]?.publicationDate || "N/A";
-        slug = item.slug?.current || "N/A";
-        categoryName = item.block[0]?.category?.title || "N/A";
-    } else if (itemType === "categories") {
-        heading = item.title || "N/A";
-        publicationDate = item._createdAt || "N/A";
-        slug = item.slug?.current || "N/A";
-    }
-
-    return (
-        <div className="flex w-full text-sm">
-            <div className="w-1/4 p-2">
-                <span className="capitalize text-gray-400">{heading}</span>
-            </div>
-            <div className="w-1/4 p-2">
-                <span className="text-gray-400">{publicationDate}</span>
-            </div>
-            <div className="w-1/4 p-2">
-                <span className="text-gray-400">/{slug}</span>
-            </div>
-            {itemType === "posts" && (
-                <div className="w-1/4 p-2">
-                    <span className="whitespace-nowrap rounded-md bg-gray-600/25 px-2 py-1 font-bold uppercase text-gray-400 hover:bg-gray-600/50">
-                        {categoryName}
-                    </span>
-                </div>
-            )}
-        </div>
-    );
+	return (
+		<div className="rounded-xl border border-gray-700 p-4">
+			{fieldsConfig.map((field) => (
+				<FieldWithLabel
+					key={field.key}
+					label={field.label}
+					value={getNestedValue(item, field.key.replace(/\[(\d+)\]/, ".$1"))}
+				/>
+			))}
+		</div>
+	);
 };
-
-const CurrentItem: React.FC<{ item: any; itemType: string }> = ({
-    item,
-    itemType,
-}) => {
-    // Reuse logic from DataFields for consistency; adjust as necessary for your use case
-    let heading = "N/A";
-    let publicationDate = "N/A";
-    let slug = "N/A";
-    let categoryName = "N/A";
-
-    if (itemType === "posts") {
-        heading = item.block[0]?.heading || "N/A";
-        publicationDate = item.block[0]?.publicationDate || "N/A";
-        slug = item.slug?.current || "N/A";
-        categoryName = item.block[0]?.category?.title || "N/A";
-    } else if (itemType === "categories") {
-        heading = item.title || "N/A";
-        publicationDate = item._createdAt || "N/A";
-        slug = item.slug?.current || "N/A";
-    }
-
-    return (
-        <div className="flex flex-col gap-2">
-            <FieldWithLabel label="Heading" value={heading} />
-            <FieldWithLabel label="Publication Date" value={publicationDate} />
-            <FieldWithLabel label="Slug" value={slug} />
-            {itemType === "posts" && categoryName && (
-                <FieldWithLabel label="Category" value={categoryName} />
-            )}
-        </div>
-    );
-};
-
 const FieldWithLabel: React.FC<{ label: string; value?: string }> = ({
-    label,
-    value,
+	label,
+	value,
 }) => (
-    <div className="flex flex-col">
-        <span className="text-sm text-gray-400">{label}:</span>
-        <span className="p-2 text-2xl text-gray-200">{value || "No Data"}</span>
-    </div>
+	<div className="mb-4 flex flex-col">
+		<span className="text-sm text-gray-400">{label}:</span>
+		<span className="p-2 text-lg text-gray-200">{value || "No Data"}</span>
+	</div>
 );
 
 export default ContentPage;
