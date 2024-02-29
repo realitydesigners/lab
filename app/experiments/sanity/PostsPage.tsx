@@ -1,26 +1,13 @@
 "use client";
-import { category } from "@/sanity/schemas";
 import React, { useState } from "react";
 import Navigation from "./Navigation";
-import { CategoryPayload, PostsPayload } from "./types";
 
-interface ContentPageProps {
-    posts: PostsPayload[];
-    categories: CategoryPayload[];
-}
-
-interface DataTableProps<T> {
-    data: T[];
-    itemType: "posts" | "categories";
-}
-
-interface DataFieldsProps<T> {
-    item: T;
-    itemType: "posts" | "categories";
-}
-
-const ContentPage: React.FC<ContentPageProps> = ({ posts, categories }) => {
-    const [selectedContentType, setSelectedContentType] = useState("");
+// Simplified component props with `any` type for posts and categories
+const ContentPage: React.FC<{ posts: any[]; categories: any[] }> = ({
+    posts,
+    categories,
+}) => {
+    const [selectedContentType, setSelectedContentType] = useState<string>("");
 
     const onSelectContentType = (contentType: string) => {
         setSelectedContentType(contentType);
@@ -41,55 +28,28 @@ const ContentPage: React.FC<ContentPageProps> = ({ posts, categories }) => {
                 onSelectContentType={onSelectContentType}
             />
             {selectedContentType === "posts" && (
-                <DataTable<PostsPayload> data={posts} itemType="posts" />
+                <DataTable data={posts} itemType="posts" />
             )}
             {selectedContentType === "categories" && (
-                <DataTable<CategoryPayload>
-                    data={categories}
-                    itemType="categories"
-                />
+                <DataTable data={categories} itemType="categories" />
             )}
         </main>
     );
 };
 
-export default ContentPage;
-
-const DataTableHeader: React.FC<{ itemType: "posts" | "categories" }> = ({
-    itemType,
-}) => (
-    <div className="flex w-full border-b border-gray-700">
-        <div className="w-1/4 p-2 font-bold uppercase tracking-wide text-gray-200">
-            {itemType === "posts" ? "Heading" : "Title"}
-        </div>
-        <div className="w-1/4 p-2 font-bold uppercase tracking-wide text-gray-200">
-            Publication Date
-        </div>
-        <div className="w-1/4 p-2 font-bold uppercase tracking-wide text-gray-200">
-            Slug
-        </div>
-        {itemType === "posts" && (
-            <div className="w-1/4 p-2 font-bold uppercase tracking-wide text-gray-200">
-                Category
-            </div>
-        )}
-    </div>
-);
-
-const DataTable = <T extends PostsPayload | CategoryPayload>({
+const DataTable: React.FC<{ data: any[]; itemType: string }> = ({
     data,
     itemType,
-}: DataTableProps<T>) => {
-    const [selectedItem, setSelectedItem] = useState<T | null>(null);
+}) => {
+    const [selectedItem, setSelectedItem] = useState<any | null>(null);
 
     return (
         <div className="flex h-full p-12">
             <div className="flex w-3/4 flex-col p-4">
                 <DataTableHeader itemType={itemType} />
-                {data.map((item) => (
-                    // biome-ignore lint/a11y/useKeyWithClickEvents: <explanation>
+                {data.map((item, index) => (
                     <div
-                        key={item._id}
+                        key={index}
                         className="flex w-full cursor-pointer border-b border-gray-700 hover:bg-gray-700/50"
                         onClick={() => setSelectedItem(item)}
                     >
@@ -113,32 +73,43 @@ const DataTable = <T extends PostsPayload | CategoryPayload>({
     );
 };
 
-const DataFields = <T extends PostsPayload | CategoryPayload>({
+const DataTableHeader: React.FC<{ itemType: string }> = ({ itemType }) => (
+    <div className="flex w-full border-b border-gray-700">
+        <div className="w-1/4 p-2 font-bold uppercase tracking-wide text-gray-200">
+            {itemType === "posts" ? "Heading" : "Title"}
+        </div>
+        <div className="w-1/4 p-2 font-bold uppercase tracking-wide text-gray-200">
+            Publication Date
+        </div>
+        <div className="w-1/4 p-2 font-bold uppercase tracking-wide text-gray-200">
+            Slug
+        </div>
+        {itemType === "posts" && (
+            <div className="w-1/4 p-2 font-bold uppercase tracking-wide text-gray-200">
+                Category
+            </div>
+        )}
+    </div>
+);
+
+const DataFields: React.FC<{ item: any; itemType: string }> = ({
     item,
     itemType,
-}: DataFieldsProps<T>) => {
-    let heading: string | undefined;
-    let publicationDate: string | undefined;
-    let slug: string | undefined;
-    let categoryName: string | undefined;
+}) => {
+    let heading = "N/A";
+    let publicationDate = "N/A";
+    let slug = "N/A";
+    let categoryName = "N/A";
 
-    switch (itemType) {
-        case "posts":
-            heading = (item as PostsPayload).block?.[0]?.heading;
-            publicationDate = (item as PostsPayload).block?.[0]
-                ?.publicationDate;
-            slug = (item as PostsPayload).slug?.current;
-            categoryName =
-                (item as PostsPayload).block?.[0]?.category?.title || undefined;
-            break;
-
-        case "categories":
-            heading = (item as CategoryPayload).title;
-            publicationDate = (item as CategoryPayload)._createdAt;
-            slug = (item as CategoryPayload).slug?.current;
-            break;
-        default:
-            break;
+    if (itemType === "posts") {
+        heading = item.block[0]?.heading || "N/A";
+        publicationDate = item.block[0]?.publicationDate || "N/A";
+        slug = item.slug?.current || "N/A";
+        categoryName = item.block[0]?.category?.title || "N/A";
+    } else if (itemType === "categories") {
+        heading = item.title || "N/A";
+        publicationDate = item._createdAt || "N/A";
+        slug = item.slug?.current || "N/A";
     }
 
     return (
@@ -152,7 +123,7 @@ const DataFields = <T extends PostsPayload | CategoryPayload>({
             <div className="w-1/4 p-2">
                 <span className="text-gray-400">/{slug}</span>
             </div>
-            {itemType === "posts" && categoryName && (
+            {itemType === "posts" && (
                 <div className="w-1/4 p-2">
                     <span className="whitespace-nowrap rounded-md bg-gray-600/25 px-2 py-1 font-bold uppercase text-gray-400 hover:bg-gray-600/50">
                         {categoryName}
@@ -163,31 +134,25 @@ const DataFields = <T extends PostsPayload | CategoryPayload>({
     );
 };
 
-const CurrentItem = <T extends PostsPayload | CategoryPayload>({
+const CurrentItem: React.FC<{ item: any; itemType: string }> = ({
     item,
     itemType,
-}: DataFieldsProps<T>) => {
-    let heading: string | undefined;
-    let publicationDate: string | undefined;
-    let slug: string | undefined;
-    let categoryName: string | undefined;
+}) => {
+    // Reuse logic from DataFields for consistency; adjust as necessary for your use case
+    let heading = "N/A";
+    let publicationDate = "N/A";
+    let slug = "N/A";
+    let categoryName = "N/A";
 
-    switch (itemType) {
-        case "posts":
-            heading = (item as PostsPayload).block?.[0]?.heading;
-            publicationDate = (item as PostsPayload).block?.[0]
-                ?.publicationDate;
-            slug = (item as PostsPayload).slug?.current;
-            categoryName =
-                (item as PostsPayload).block?.[0]?.category?.title || undefined;
-            break;
-        case "categories":
-            heading = (item as CategoryPayload).title;
-            publicationDate = (item as CategoryPayload)._createdAt;
-            slug = (item as CategoryPayload).slug?.current;
-            break;
-        default:
-            break;
+    if (itemType === "posts") {
+        heading = item.block[0]?.heading || "N/A";
+        publicationDate = item.block[0]?.publicationDate || "N/A";
+        slug = item.slug?.current || "N/A";
+        categoryName = item.block[0]?.category?.title || "N/A";
+    } else if (itemType === "categories") {
+        heading = item.title || "N/A";
+        publicationDate = item._createdAt || "N/A";
+        slug = item.slug?.current || "N/A";
     }
 
     return (
@@ -211,3 +176,5 @@ const FieldWithLabel: React.FC<{ label: string; value?: string }> = ({
         <span className="p-2 text-2xl text-gray-200">{value || "No Data"}</span>
     </div>
 );
+
+export default ContentPage;
