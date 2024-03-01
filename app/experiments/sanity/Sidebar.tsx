@@ -53,7 +53,7 @@ export default function Sidebar() {
 	};
 
 	return (
-		<div className="fixed flex h-screen w-[80px] flex-col items-center justify-center  border-r border-gray-700/50 bg-black">
+		<div className="fixed flex h-screen w-[80px] flex-col items-center justify-center  border-r border-gray-700 bg-black">
 			<div className="absolute top-4">
 				{/* biome-ignore lint/a11y/noSvgWithoutTitle: <explanation> */}
 				<svg
@@ -76,7 +76,7 @@ export default function Sidebar() {
 						<li key={label} className="flex">
 							<Link
 								href={href}
-								className=" h-[60px] w-[60px] rounded-[.5em] border border-gray-700/50 hover:bg-gray-700/25"
+								className=" h-[60px] w-[60px] rounded-[.5em] border border-gray-700 hover:bg-gray-700/25"
 							>
 								<div className="flex h-full w-full items-center justify-center">
 									{getIcon(icon)}
