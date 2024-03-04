@@ -46,6 +46,8 @@ export const getDataForContentType = (selectedContentType, allData) => {
 			return allData.categories;
 		case "videos":
 			return allData.videos;
+		case "experiments":
+			return allData.experiments;
 
 		default:
 			return [];
@@ -65,4 +67,5 @@ export const fieldOrder = {
 	posts: ["block", "_createdAt", "slug", "subcategories", "model"],
 	categories: ["title", "_createdAt", "slug"],
 	videos: ["title", "_createdAt", "model", "subcategories", "image", "videos"],
+	experiments: ["block", "_createdAt", "slug", "subcategories", "model"],
 };
