@@ -362,3 +362,31 @@ export const glossaryBySlugQuery = groq`
  website,
  tiktok,
 }`;
+
+//
+export const experimentQuery = groq`
+ *[_type == "experiment"] |  order(_createdAt asc) {
+title,
+slug,
+_createdAt, 
+  block[]{
+       ...,
+       heading,
+       subheading,
+       image,
+       
+       layout,
+       title,
+        category->,
+        layout,
+       publicationDate,
+      team->{
+       ...,
+       name,
+       role,
+       image,
+       shortBio,
+     },
+    },
+  
+}`;

@@ -145,3 +145,12 @@ interface PostItemProps {
 	};
 	dateString?: string;
 }
+
+export interface ExperimentPayload extends BaseItem {
+	publicationDate?: string;
+	excerpt?: string;
+	image?: Image;
+	block?: Array<BlockItem>;
+	content?: PortableTextBlock[];
+	ogImage?: Image;
+}
