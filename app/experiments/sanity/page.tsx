@@ -34,14 +34,7 @@ export default async function Page() {
         tags: ["experiments"],
     });
 
-    console.log(posts);
+    const allQueries = { posts, categories, videos, experiments };
 
-    return (
-        <ContentPage
-            posts={posts}
-            categories={categories}
-            videos={videos}
-            experiments={experiments}
-        />
-    );
+    return <ContentPage data={allQueries} />;
 }
