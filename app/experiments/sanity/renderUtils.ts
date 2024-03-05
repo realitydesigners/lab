@@ -1,71 +1,91 @@
-export const renderBlockContent = (blocks) => {
-	if (!blocks || blocks.length === 0) return "No Content";
-	const headings = blocks
-		.filter((block) => block.heading)
-		.map((block) => block.heading)
-		.join(", ");
-	return headings || "";
+export const truncateString = (str: string, num: number): string => {
+	if (str && str.length > num) {
+		return `${str.slice(0, num)}...`;
+	}
+	return str || "";
 };
 
-export const renderFileOrImage = (fieldValue) => {
-	return fieldValue?.asset ? "Yes" : "No";
+export const renderContent = (value: any): string => {
+	if (typeof value === "string") {
+		return truncateString(value, 50);
+	}
+	return value || "N/A";
 };
 
-export const renderTitles = (items) => {
-	return items && items.length > 0
-		? items.map((item) => item.title || "Unnamed").join(", ")
-		: "N/A";
+export const renderNestedContent = (block: any, key: string): string => {
+	const content = block[key];
+
+	if (key === "team" && typeof content === "object" && content !== null) {
+		return content.name ? truncateString(content.name, 80) : "Team Member";
+	}
+
+	if (typeof content === "object" && content.title) {
+		return truncateString(content.title, 80);
+	}
+
+	if (typeof content === "string") {
+		return truncateString(content, 80);
+	}
+
+	return "N/A";
 };
 
-export const renderFieldValue = (item, field) => {
-	switch (field) {
-		case "block":
-			return renderBlockContent(item[field]);
-		case "subcategories":
-			return renderTitles(item[field]);
-		case "model":
-			return item[field]?.title || "No Model Title";
-		case "image":
-		case "video":
-			return renderFileOrImage(item[field]);
-		default: {
-			const fieldValue = item[field];
-			if (typeof fieldValue === "object" && fieldValue !== null) {
-				return fieldValue.current || JSON.stringify(fieldValue);
+export const preprocessDataForTable = (data: any[]): any[] => {
+	const fieldOrder = [
+		"heading",
+		"title",
+		"subheading",
+		"layout",
+		"team",
+		"publicationDate",
+		"image",
+		"content",
+		"slug",
+		"url",
+		"category",
+	];
+
+	return data.map((item) => {
+		const processedItem: any = {};
+
+		// biome-ignore lint/complexity/noForEach: <explanation>
+		fieldOrder.forEach((field) => {
+			if (item[field]) {
+				if (field === "slug") {
+					processedItem.slug = item[field].current;
+				} else {
+					processedItem[field] = item[field];
+				}
+			} else if (item.block && Array.isArray(item.block)) {
+				// Replace forEach with for...of loop
+				for (const block of item.block) {
+					if (block[field]) {
+						processedItem[field] = renderNestedContent(block, field);
+					}
+				}
 			}
-			return fieldValue || "N/A";
+		});
+
+		return processedItem;
+	});
+};
+
+export const extractKeysFromData = (data: any[]): string[] => {
+	const keys = new Set<string>();
+
+	// Replace forEach with for...of loop
+	for (const item of data) {
+		for (const key of Object.keys(item)) {
+			keys.add(key);
 		}
 	}
+
+	return Array.from(keys);
 };
 
-export const getDataForContentType = (selectedContentType, allData) => {
-	switch (selectedContentType) {
-		case "posts":
-			return allData.posts;
-		case "categories":
-			return allData.categories;
-		case "videos":
-			return allData.videos;
-		case "experiments":
-			return allData.experiments;
-
-		default:
-			return [];
-	}
-};
-
-export const fieldLabels = {
-	block: "Heading",
-	subcategories: "Subcategories",
-	model: "Model",
-	image: "Image",
-	video: "Video",
-	_createdAt: "Created",
-};
-
-export const fieldOrder = {
-	posts: ["block", "_createdAt", "slug", "subcategories", "model"],
-	categories: ["title", "_createdAt", "slug"],
-	videos: ["title", "_createdAt", "model", "subcategories", "image", "videos"],
-	experiments: ["block", "_createdAt", "slug", "subcategories", "model"],
+export const getDataForContentType = (
+	selectedContentType: string,
+	allData: { posts: any; categories: any; videos: any; experiments: any },
+): any[] => {
+	return allData[selectedContentType] || [];
 };

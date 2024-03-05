@@ -72,13 +72,7 @@ export const postsQuery = groq`
         category->,
         layout,
        publicationDate,
-      team->{
-       ...,
-       name,
-       role,
-       image,
-       shortBio,
-     },
+       team->,
     },
      
    
