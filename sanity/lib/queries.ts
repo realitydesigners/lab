@@ -56,11 +56,6 @@ export const postsQuery = groq`
  *[_type == "posts"] | order(_createdAt desc)[0..40] {
     slug,
     _createdAt,
-    subcategories[]->{
-     ...,
-     name,
-     title,
-     },
      block[]{
        ...,
        heading,
@@ -69,10 +64,13 @@ export const postsQuery = groq`
        tags,
        layout,
        title,
-        category->,
-        layout,
+       category->,
+       layout,
        publicationDate,
        team->,
+       content[] {
+         ...,
+      }
     },
      
    

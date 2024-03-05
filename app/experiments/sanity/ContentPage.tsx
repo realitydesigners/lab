@@ -3,10 +3,11 @@ import React, { useState } from "react";
 import DynamicTable from "./DynamicTable";
 import Navigation from "./Navigation";
 import PostsChart from "./PostsChart";
-import { getDataForContentType, preprocessDataForTable } from "./renderUtils";
+import { getDataForContentType } from "./renderUtils";
 
 const ContentPage = ({ data }) => {
-    const [selectedContentType, setSelectedContentType] = useState<string>("");
+    const [selectedContentType, setSelectedContentType] =
+        useState<string>("posts");
 
     const onSelectContentType = (contentType: string) => {
         setSelectedContentType(contentType);

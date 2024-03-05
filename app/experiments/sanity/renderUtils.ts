@@ -1,26 +1,22 @@
-export const truncateString = (str: string, num: number): string => {
-	if (str && str.length > num) {
-		return `${str.slice(0, num)}...`;
-	}
-	return str || "";
-};
-
-export const renderContent = (value: any): string => {
-	if (typeof value === "string") {
-		return truncateString(value, 50);
-	}
-	return value || "N/A";
-};
-
 export const renderNestedContent = (block: any, key: string): string => {
+	const truncateString = (str: string, num: number): string => {
+		if (str && str.length > num) {
+			return `${str.slice(0, num)}...`;
+		}
+		return str || "";
+	};
+
 	const content = block[key];
 
-	if (key === "team" && typeof content === "object" && content !== null) {
-		return content.name ? truncateString(content.name, 80) : "Team Member";
-	}
-
-	if (typeof content === "object" && content.title) {
-		return truncateString(content.title, 80);
+	if (typeof content === "object") {
+		let result = "";
+		if (content.title) {
+			result += truncateString(content.title, 80);
+		}
+		if (content.name) {
+			result += ` ${truncateString(content.name, 80)}`;
+		}
+		return result.trim();
 	}
 
 	if (typeof content === "string") {
@@ -47,7 +43,6 @@ export const preprocessDataForTable = (data: any[]): any[] => {
 
 	return data.map((item) => {
 		const processedItem: any = {};
-
 		// biome-ignore lint/complexity/noForEach: <explanation>
 		fieldOrder.forEach((field) => {
 			if (item[field]) {
@@ -57,7 +52,6 @@ export const preprocessDataForTable = (data: any[]): any[] => {
 					processedItem[field] = item[field];
 				}
 			} else if (item.block && Array.isArray(item.block)) {
-				// Replace forEach with for...of loop
 				for (const block of item.block) {
 					if (block[field]) {
 						processedItem[field] = renderNestedContent(block, field);
@@ -73,7 +67,6 @@ export const preprocessDataForTable = (data: any[]): any[] => {
 export const extractKeysFromData = (data: any[]): string[] => {
 	const keys = new Set<string>();
 
-	// Replace forEach with for...of loop
 	for (const item of data) {
 		for (const key of Object.keys(item)) {
 			keys.add(key);
