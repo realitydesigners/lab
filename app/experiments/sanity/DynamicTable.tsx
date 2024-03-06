@@ -1,5 +1,4 @@
 "use client";
-
 import React, { useState } from "react";
 import {
     extractKeysFromData,
@@ -7,82 +6,79 @@ import {
     renderNestedContent,
 } from "./renderUtils";
 
-const DetailModal = ({ item, onClose }) => {
-    const RenderItemDetails = ({ content, indent = 0 }) => {
-        if (!content) return null;
+const RenderItemDetails = ({ content, indent = 0 }) => {
+    if (!content) return null;
 
-        if (Array.isArray(content)) {
-            return (
-                <ul>
-                    {content.map((item, index) => (
-                        <li key={index}>
-                            <RenderItemDetails
-                                content={item}
-                                indent={indent + 1}
-                            />
-                        </li>
-                    ))}
-                </ul>
-            );
-        }
-        if (typeof content === "object") {
-            return (
-                <div style={{ marginLeft: `${indent * 5}px` }}>
-                    {Object.entries(content)
-                        .filter(([, value]) => value != null)
-                        .map(([key, value]) => {
-                            if (
-                                [
-                                    "_type",
-                                    "_key",
-                                    "_ref",
-                                    "_rev",
-                                    "asset",
-                                    "markDefs",
-                                ].includes(key)
-                            ) {
-                                return null;
-                            }
-                            if (key === "slug") {
-                                const slugValue = value as {
-                                    current: string;
-                                };
-                                return (
-                                    <div key={key}>
-                                        <strong className="mr-2 text-gray-200">
-                                            {key}:
-                                        </strong>
-                                        <span className="text-gray-400">
-                                            {slugValue.current}
-                                        </span>
-                                    </div>
-                                );
-                            }
-
+    if (Array.isArray(content)) {
+        return (
+            <ul>
+                {content.map((item) => (
+                    <li key={item}>
+                        <RenderItemDetails content={item} indent={indent + 1} />
+                    </li>
+                ))}
+            </ul>
+        );
+    }
+    if (typeof content === "object") {
+        return (
+            <div style={{ marginLeft: `${indent * 5}px` }}>
+                {Object.entries(content)
+                    .filter(([, value]) => value != null)
+                    .map(([key, value]) => {
+                        if (
+                            [
+                                "_type",
+                                "_key",
+                                "_ref",
+                                "_rev",
+                                "asset",
+                                "markDefs",
+                            ].includes(key)
+                        ) {
+                            return null;
+                        }
+                        if (key === "slug") {
+                            const slugValue = value as {
+                                current: string;
+                            };
                             return (
                                 <div key={key}>
                                     <strong className="mr-2 text-gray-200">
                                         {key}:
                                     </strong>
                                     <span className="text-gray-400">
-                                        <RenderItemDetails
-                                            content={value}
-                                            indent={indent + 1}
-                                        />
+                                        {slugValue.current}
                                     </span>
                                 </div>
                             );
-                        })}
-                </div>
-            );
-        }
-        if (typeof content === "string") {
-            return <span className="text-gray-400">{content}</span>;
-        }
+                        }
 
-        return <span className="text-gray-400">{String(content)}</span>;
-    };
+                        return (
+                            <div key={key}>
+                                <strong className="mr-2 text-gray-200">
+                                    {key}:
+                                </strong>
+                                <span className="text-gray-400">
+                                    <RenderItemDetails
+                                        content={value}
+                                        indent={indent + 1}
+                                    />
+                                </span>
+                            </div>
+                        );
+                    })}
+            </div>
+        );
+    }
+    if (typeof content === "string") {
+        return <span className="text-gray-400">{content}</span>;
+    }
 
+    return <span className="text-gray-400">{String(content)}</span>;
+};
+
+const DetailModal = ({ item, onClose }) => {
     return (
         <div className="fixed inset-0 z-10 flex items-center justify-center bg-black bg-opacity-70">
             <div className="relative w-full max-w-[70vw] overflow-y-auto rounded-lg border border-gray-700 bg-black p-5">
@@ -140,13 +136,13 @@ const DynamicTable = ({ data }) => {
                     {processedData.map((item, itemIndex) => (
                         // biome-ignore lint/a11y/useKeyWithClickEvents: <explanation>
                         <tr
-                            key={itemIndex}
+                            key={`${item.id}-${itemIndex}`} // Generate a unique key using a unique identifier from the data
                             className="cursor-pointer border-b border-gray-600 hover:bg-gray-700/50"
                             onClick={() => handleRowClick(data[itemIndex])} // Use original data here for modal
                         >
                             {headers.map((header) => (
                                 <td
-                                    key={`${header}-${itemIndex}`}
+                                    key={`${header}-${item.id}-${itemIndex}`} // Generate a unique key using a combination of header, unique identifier, and index
                                     className="whitespace-nowrap px-6 py-4 text-gray-400"
                                 >
                                     {renderNestedContent(item, header)}
