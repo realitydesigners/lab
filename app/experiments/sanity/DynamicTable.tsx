@@ -44,13 +44,16 @@ const DetailModal = ({ item, onClose }) => {
                                 return null;
                             }
                             if (key === "slug") {
+                                const slugValue = value as {
+                                    current: string;
+                                };
                                 return (
                                     <div key={key}>
                                         <strong className="mr-2 text-gray-200">
                                             {key}:
                                         </strong>
                                         <span className="text-gray-400">
-                                            {value.current}
+                                            {slugValue.current}
                                         </span>
                                     </div>
                                 );
