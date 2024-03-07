@@ -1,4 +1,4 @@
-import ExperimentsList from "@/components/ExperimentList";
+import ExperimentsList from "@/app/experiments/[slug]/ExperimentList";
 import { sanityFetch } from "@/sanity/lib/client";
 import { experimentQuery } from "@/sanity/lib/queries";
 import { ExperimentsPayload } from "@/types";
