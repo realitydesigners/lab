@@ -399,6 +399,16 @@ export const experimentSlugQuery = groq`
        layout,
        tags->,
        category->,
+      "splineDetails": spline[0]->{
+        "splineTitle": title,
+        "splineUrl": splineUrl, 
+        "splineImage": image,
+        "splineSlug": slug.current,
+        "subHeading": subheading,
+       
+      },
+ 
+     
        
     
         content[] {
