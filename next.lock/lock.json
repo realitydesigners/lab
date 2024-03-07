@@ -1,0 +1,4 @@
+{
+  "https://themer.sanity.build/api/hues?default=darkest:000000&primary=59595f;600;lightest:e3e3e3&transparent=7d838c": { "integrity": "sha512-xUDNbkjil9bHKRJA1IeEavkAB5JsvjvZYbE+bHyCrQII52Gg+YjpUMhHXDlemXFJP+4Di4uLwcs5M+Zi44zN/g==", "contentType": "application/javascript; charset=utf-8" },
+  "version": 1
+}
