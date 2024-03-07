@@ -1,4 +1,5 @@
 import { defineField } from "sanity";
+import splineType from "../../schemas/spline";
 import tagType from "../../schemas/tag";
 
 export default {
@@ -29,10 +30,10 @@ export default {
 			type: "text",
 		}),
 		defineField({
-			type: "url",
-			name: "splineUrl",
-			title: "Spline URL",
-			validation: (rule) => rule.uri({ scheme: ["http", "https"] }),
+			name: "spline",
+			title: "Spline",
+			type: "array",
+			of: [{ type: "reference", to: [{ type: splineType.name }] }],
 		}),
 		defineField({
 			type: "image",

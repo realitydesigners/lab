@@ -6,15 +6,6 @@ export default defineType({
 	title: "Experiment",
 	fields: [
 		defineField({
-			name: "title",
-			type: "string",
-			title: "Title",
-			description:
-				"Represents the title or name of the category. This field is used to identify the category in the user interface and in URLs.",
-			validation: (rule) => rule.required(),
-		}),
-
-		defineField({
 			name: "slug",
 			title: "Slug",
 			type: "slug",

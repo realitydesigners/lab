@@ -56,6 +56,11 @@ export const postsQuery = groq`
  *[_type == "posts"] | order(_createdAt desc)[0..40] {
     slug,
     _createdAt,
+    subcategories[]->{
+     ...,
+     name,
+     title,
+     },
      block[]{
        ...,
        heading,
@@ -64,13 +69,16 @@ export const postsQuery = groq`
        tags,
        layout,
        title,
-       category->,
-       layout,
+        category->,
+        layout,
        publicationDate,
-       team->,
-       content[] {
-         ...,
-      }
+      team->{
+       ...,
+       name,
+       role,
+       image,
+       shortBio,
+     },
     },
      
    
@@ -356,6 +364,7 @@ export const glossaryBySlugQuery = groq`
 }`;
 
 //
+
 export const experimentQuery = groq`
  *[_type == "experiment"] |  order(_createdAt asc) {
 title,
@@ -363,22 +372,79 @@ slug,
 _createdAt, 
   block[]{
        ...,
+       layout,
        heading,
        subheading,
-       image,
-       
-       layout,
-       title,
-        category->,
-        layout,
        publicationDate,
-      team->{
-       ...,
-       name,
-       role,
        image,
-       shortBio,
-     },
+       layout,
+       tags->,
+       category->,
+       
     },
   
 }`;
+
+export const experimentSlugQuery = groq`
+
+*[_type == "experiment" && slug.current == $slug][0] {
+    slug,
+    block[]{
+       ...,
+       layout,
+       heading,
+       subheading,
+       publicationDate,
+       image,
+       layout,
+       tags->,
+       category->,
+       
+    
+        content[] {
+            ...,
+            image-> {
+                ...,
+                className->{name},
+                team->,
+            },
+
+            markDefs[] {
+                ...,
+                _type == "internalLink" => {
+                    "slug": @.reference->slug
+                }
+            },
+
+            "videoRef": {
+              ...,
+                "videoTitle": video->title,
+                "videoFileUrl": video->video.asset->url,
+                "videoImage": video->image.asset->url,
+                "videoTeam": video->team,
+            },
+            
+            "audioRefData": {
+                "audioTitle": audio->title,
+                "audioFileUrl": audio->audioFile.asset->url
+            },
+            
+            "quoteRef": {
+                "quoteTitle": quote->quote,
+                "quoteAuthor": quote->author,
+                "quoteImage": quote->mediaRef.image->image,
+                "quoteLayout": quote->mediaRef.layout,
+
+            },
+
+            "postsRef": {
+                "postsHeading": posts->block[0].heading,
+                "postsSlug": posts->slug.current,
+                "postsImage": posts->block[0].image,
+            },
+        },
+    },
+}
+
+
+  `;

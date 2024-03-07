@@ -157,7 +157,7 @@ const PostsChart: React.FC<Props> = ({ posts }) => {
     return (
         <div
             ref={divRef}
-            className="h-full w-full items-center justify-center rounded-[1em] border border-gray-700 px-4  "
+            className="h-full w-full items-center justify-center border border-gray-700 px-4  "
         >
             <svg ref={svgRef} width="100%" height="100%" />
         </div>

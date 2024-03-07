@@ -3,7 +3,6 @@ import {
 	fileBlock,
 	headingBlock,
 	headingSplineBlock,
-	imageCanvasBlock,
 	splineBlock,
 } from "@/sanity/blocks/experiments/index";
 import { apiVersion, dataset, projectId, studioUrl } from "@/sanity/lib/api";
@@ -14,6 +13,7 @@ import {
 	model,
 	posts,
 	quote,
+	spline,
 	tags,
 	video,
 } from "@/sanity/schemas";
@@ -42,6 +42,7 @@ export default defineConfig({
 			video,
 			quote,
 			category,
+			spline,
 			experiment,
 			model,
 			tags,
@@ -50,7 +51,6 @@ export default defineConfig({
 			fileBlock,
 			headingSplineBlock,
 			contentBlock,
-			imageCanvasBlock,
 		],
 	},
 	form: {

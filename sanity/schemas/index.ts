@@ -6,3 +6,4 @@ export { default as video } from "@/sanity/schemas/video";
 export { default as model } from "@/sanity/schemas/model";
 export { default as experiment } from "@/sanity/schemas/experiment";
 export { default as tags } from "@/sanity/schemas/tag";
+export { default as spline } from "@/sanity/schemas/spline";

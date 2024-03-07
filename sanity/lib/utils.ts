@@ -39,6 +39,8 @@ export function resolveHref(
 			return slug ? `/posts/${slug}` : undefined;
 		case "videos":
 			return slug ? `/videos/${slug}` : undefined;
+		case "experiments":
+			return slug ? `/experiments/${slug}` : undefined;
 		case "team":
 			return slug ? `/team/${slug}` : undefined;
 		default:

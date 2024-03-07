@@ -18,6 +18,7 @@ export default async function Page() {
         query: postsQuery,
         tags: ["posts"],
     });
+    console.log(posts);
 
     const categories: CategoryPayload[] = await sanityFetch({
         query: categoryQuery,
