@@ -377,7 +377,10 @@ slug,
        publicationDate,
        image,
        layout,
-       tags->,
+       
+      "tagDetails": tags[0]->{
+            "tagName": name
+        },
        category->,
        spline[0]->{
         "splineTitle": title,
@@ -386,6 +389,7 @@ slug,
         "splineSlug": slug.current,
         "splineSubHeading": subheading,
       },
+    
       
     },
   
@@ -403,16 +407,21 @@ export const experimentSlugQuery = groq`
        publicationDate,
        image,
        layout,
-       tags->,
-       category->,
-      "splineDetails": spline[0]->{
-        "splineTitle": title,
-        "splineUrl": splineUrl, 
-        "splineImage": image,
-        "splineSlug": slug.current,
-        "splineSubHeading": subheading,
-       
-      },
+          "tagss": tags[]->{
+            title,
+        },
+     "tagDetails": tags[]->{
+     "tagName": title
+},
+
+        category->,
+        "splineDetails": spline[0]->{
+            "splineTitle": title,
+            "splineUrl": splineUrl,
+            "splineImage": image,
+            "splineSlug": slug.current,
+            "splineSubHeading": subheading,
+        },
         content[] {
             ...,
             image-> {

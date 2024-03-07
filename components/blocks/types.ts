@@ -24,8 +24,9 @@ export interface ContentBlockProps {
 	theme?: string | undefined;
 }
 
-export type LayoutTheme = "dark" | "light" | "team" | "video" | "transparent";
-export type TemplateTheme = "dark" | "light" | "transparent";
+export type LayoutTheme = "dark" | "light";
+export type TemplateTheme = "dark" | "light";
+
 export interface ThemeProps {
 	textColor?: string;
 	isInset?: boolean;
