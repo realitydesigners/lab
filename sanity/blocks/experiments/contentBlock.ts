@@ -56,7 +56,7 @@ export default {
 										name: "reference",
 										type: "reference",
 										title: "Reference",
-										to: [{ type: "posts" }],
+										to: [{ type: "experiment" }],
 									},
 									{
 										name: "theme",
@@ -102,10 +102,10 @@ export default {
 					title: "Post",
 					preview: {
 						select: {
-							title: "posts.block.0.heading",
-							excerpt: "posts.block.0.subheading",
-							publicationDate: "posts.block.0.publicationDate",
-							media: "posts.block.0.image",
+							title: "experiment.block.0.heading",
+							excerpt: "experiment.block.0.subheading",
+							publicationDate: "experiment.block.0.publicationDate",
+							media: "experiment.block.0.image",
 						},
 						prepare(selection) {
 							const { title, excerpt, publicationDate, media } = selection;
@@ -126,160 +126,11 @@ export default {
 					fields: [
 						defineField({
 							type: "reference",
-							name: "posts",
+							name: "experiments",
 							title: "Referenced Post",
-							to: [{ type: "posts" }],
+							to: [{ type: "experiment" }],
 						}),
 					],
-				}),
-				defineField({
-					type: "object",
-					name: "imageRef",
-					title: "Image",
-					fields: [
-						defineField({
-							type: "reference",
-							icon: ImageIcon,
-							name: "image",
-							title: "Image Item",
-							to: [{ type: "img" }],
-						}),
-						{
-							name: "className",
-							title: "CSS Class",
-							type: "string",
-							options: {
-								list: [
-									{ title: "Image | Team Name Below", value: "image-standard" },
-									{
-										title: "Image | Team Name Below Dark",
-										value: "image-standard-dark",
-									},
-									{ title: "Image | Team Inset", value: "image-inset" },
-								],
-							},
-						},
-					],
-					preview: {
-						select: {
-							imageUrl: "image.image",
-							title: "image.title",
-							className: "className",
-						},
-						prepare(selection) {
-							const { title, imageUrl, className } = selection;
-							const classNameTitles = {
-								"image-standard": "Image | Team Name Below",
-								"image-standard-dark": "Image | Team Name Below Dark",
-								"image-inset": "Image | Team Inset",
-							};
-							const classNameTitle =
-								classNameTitles[className] || "No class selected";
-
-							return {
-								title: title || "Untitled",
-								subtitle: classNameTitle,
-								media: imageUrl,
-							};
-						},
-					},
-				}),
-				defineField({
-					type: "object",
-					name: "videoRef",
-					title: "Video",
-					preview: {
-						select: {
-							imageUrl: "video.image",
-							title: "video.title",
-							className: "className",
-						},
-						prepare(selection) {
-							const { title, imageUrl, className } = selection;
-							const classNameTitles = {
-								light: "Video | Light",
-								dark: "Video | Dark",
-								transparent: "Video | Transparent",
-							};
-							const classNameTitle =
-								classNameTitles[className] || "No class selected";
-
-							return {
-								title: title || "Untitled",
-								subtitle: classNameTitle,
-								media: imageUrl,
-							};
-						},
-					},
-					fields: [
-						defineField({
-							type: "reference",
-							icon: ImageIcon,
-							name: "video",
-							title: "Video Item",
-							to: [{ type: "video" }],
-						}),
-						{
-							name: "className",
-							title: "CSS Class",
-							type: "string",
-							options: {
-								list: [
-									{ title: "Video | Light ", value: "light" },
-									{ title: "Video | Dark", value: "dark" },
-									{ title: "Video | Transparent", value: "transparent" },
-								],
-							},
-						},
-					],
-				}),
-				defineField({
-					type: "object",
-					name: "quoteRef",
-					title: "Quote",
-					icon: BookIcon,
-					fields: [
-						defineField({
-							type: "reference",
-							icon: ImageIcon,
-							name: "quote",
-							title: "Quote Item",
-							to: [{ type: "quote" }],
-						}),
-						{
-							name: "className",
-							title: "CSS Class",
-							type: "string",
-							options: {
-								list: [
-									{ title: "Card 1", value: "card-1" },
-									{ title: "Card 2", value: "card-2" },
-								],
-							},
-						},
-					],
-					preview: {
-						select: {
-							title: "quote.quote",
-							imageUrl: "quote.mediaRef.image.image",
-							className: "className",
-						},
-						prepare(selection) {
-							const { title, imageUrl, className } = selection;
-							const classNameTitles = {
-								"card-1": "Card 1",
-								"card-2": "Card 2",
-							};
-							const classNameTitle =
-								classNameTitles[className] || "No class selected";
-
-							return {
-								title: title || "Untitled",
-								subtitle: classNameTitle,
-								media: imageUrl,
-							};
-						},
-					},
 				}),
 
 				defineField({
@@ -334,30 +185,7 @@ export default {
 						},
 					},
 				}),
-				defineField({
-					type: "object",
-					icon: LinkIcon,
-					name: "iframe",
-					title: "iFrame",
-					fields: [
-						defineField({
-							type: "url",
-							name: "url",
-							title: "URL",
-							validation: (rule) => rule.uri({ scheme: ["http", "https"] }),
-						}),
-						defineField({
-							type: "string",
-							name: "width",
-							title: "Width",
-						}),
-						defineField({
-							type: "string",
-							name: "height",
-							title: "Height",
-						}),
-					],
-				}),
+
 				defineField({
 					type: "object",
 					icon: LinkIcon,

@@ -1,5 +1,4 @@
 "use client";
-
 import Spline from "@splinetool/react-spline";
 import React from "react";
 
@@ -11,7 +10,7 @@ const SplineBlock = ({ block }) => {
     switch (className) {
         case "dark": {
             return (
-                <div className="flex h-screen w-screen flex-col bg-black">
+                <div className="flex h-screen w-full flex-col bg-black">
                     <div className="flex h-full w-full">
                         {splineUrl && (
                             <div className="h-full w-full ">

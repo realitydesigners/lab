@@ -369,7 +369,6 @@ export const experimentQuery = groq`
  *[_type == "experiment"] |  order(_createdAt asc) {
 title,
 slug,
-_createdAt, 
   block[]{
        ...,
        layout,
@@ -380,7 +379,14 @@ _createdAt,
        layout,
        tags->,
        category->,
-       
+       spline[0]->{
+        "splineTitle": title,
+        "splineUrl": splineUrl,
+        "splineImage": image,
+        "splineSlug": slug.current,
+        "splineSubHeading": subheading,
+      },
+      
     },
   
 }`;
@@ -404,13 +410,9 @@ export const experimentSlugQuery = groq`
         "splineUrl": splineUrl, 
         "splineImage": image,
         "splineSlug": slug.current,
-        "subHeading": subheading,
+        "splineSubHeading": subheading,
        
       },
- 
-     
-       
-    
         content[] {
             ...,
             image-> {

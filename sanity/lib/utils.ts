@@ -35,8 +35,7 @@ export function resolveHref(
 	switch (documentType) {
 		case "home":
 			return "/";
-		case "posts":
-			return slug ? `/posts/${slug}` : undefined;
+
 		case "videos":
 			return slug ? `/videos/${slug}` : undefined;
 		case "experiments":

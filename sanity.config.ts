@@ -1,8 +1,8 @@
+import { theme } from "https://themer.sanity.build/api/hues?default=darkest:000000&primary=59595f;600;lightest:e3e3e3&transparent=7d838c";
 import {
 	contentBlock,
 	fileBlock,
 	headingBlock,
-	headingSplineBlock,
 	splineBlock,
 } from "@/sanity/blocks/experiments/index";
 import { apiVersion, dataset, projectId, studioUrl } from "@/sanity/lib/api";
@@ -11,7 +11,6 @@ import {
 	experiment,
 	img,
 	model,
-	posts,
 	quote,
 	spline,
 	tags,
@@ -30,6 +29,7 @@ const title =
 	process.env.NEXT_PUBLIC_SANITY_PROJECT_TITLE || "Reality Designers";
 
 export default defineConfig({
+	theme,
 	basePath: studioUrl,
 	projectId: projectId || "",
 	dataset: dataset || "",
@@ -37,8 +37,8 @@ export default defineConfig({
 
 	schema: {
 		types: [
-			posts,
 			img,
+
 			video,
 			quote,
 			category,
@@ -49,7 +49,6 @@ export default defineConfig({
 			headingBlock,
 			splineBlock,
 			fileBlock,
-			headingSplineBlock,
 			contentBlock,
 		],
 	},
