@@ -16,19 +16,48 @@ export function generateStaticParams() {
     return generateStaticSlugs("experiments");
 }
 
-export default async function PageSlugRoute({ params }) {
-    const currentExperiment = await sanityFetch<ExperimentsPayload>({
+export async function generateMetadata(
+    { params }: Props,
+    parent: ResolvingMetadata,
+): Promise<Metadata> {
+    const metadataBaseUrl =
+        process.env.NEXT_PUBLIC_METADATA_BASE || "http://localhost:3000";
+    const post = await sanityFetch<ExperimentsPayload>({
         query: experimentSlugQuery,
         tags: ["experiments"],
         qParams: { slug: params.slug },
     });
-    console.log(currentExperiment);
+    //@ts-ignore
+    const ogImage = urlForOpenGraphImage(post?.block?.[0]?.image);
+    const metadataBase = new URL(metadataBaseUrl);
 
-    const blocks = currentExperiment?.block || [];
+    return {
+        title: post?.block?.[0]?.heading,
+        description: post?.block?.[0]?.subheading || (await parent).description,
+        openGraph: ogImage
+            ? {
+                  images: [
+                      ogImage,
+                      ...((await parent).openGraph?.images || []),
+                  ],
+              }
+            : {},
+        metadataBase,
+    };
+}
+export default async function PageSlugRoute({ params }) {
+    const currentPost = await sanityFetch<ExperimentsPayload>({
+        query: experimentSlugQuery,
+        tags: ["experiments"],
+        qParams: { slug: params.slug },
+    });
+    console.log(currentPost);
+
+    const blocks = currentPost?.block || [];
 
     return (
         <>
-            {currentExperiment && (
+            {currentPost && (
                 <>
                     <main>
                         {blocks?.map((block) => (

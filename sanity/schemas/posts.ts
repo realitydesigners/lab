@@ -30,11 +30,6 @@ export default defineType({
 					type: "contentBlock",
 					title: "Content",
 				},
-
-				{
-					title: "Image Canvas",
-					type: "imageCanvasBlock",
-				},
 			],
 		}),
 		defineField({
