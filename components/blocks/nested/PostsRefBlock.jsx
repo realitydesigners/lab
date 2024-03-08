@@ -1,6 +1,6 @@
 "use client";
+import { monomaniac } from "@/app/fonts";
 import { SanityImage } from "@/components/global/Images";
-import { monomaniac } from "@/fonts";
 import Link from "next/link";
 import React from "react";
 

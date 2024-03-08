@@ -1,4 +1,4 @@
-import { monomaniac } from "@/fonts";
+import { monomaniac } from "@/app/fonts";
 import React from "react";
 const VideoRefBlock = ({ videoTitle, videoFileUrl, videoImage, className }) => {
 	if (!videoFileUrl) {

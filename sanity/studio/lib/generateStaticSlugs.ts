@@ -1,5 +1,10 @@
-import { apiVersion, dataset, projectId, studioUrl } from "@/sanity/lib/api";
-import { token } from "@/sanity/lib/token";
+import {
+	apiVersion,
+	dataset,
+	projectId,
+	studioUrl,
+} from "@/sanity/studio/lib/api";
+import { token } from "@/sanity/studio/lib/token";
 import { createClient } from "@sanity/client/stega";
 import { groq } from "next-sanity";
 import "server-only";

@@ -1,6 +1,6 @@
 import ExperimentsList from "@/app/experiments/[slug]/ExperimentList";
-import { sanityFetch } from "@/sanity/lib/client";
-import { experimentQuery } from "@/sanity/lib/queries";
+import { sanityFetch } from "@/sanity/studio/lib/client";
+import { experimentQuery } from "@/sanity/studio/lib/queries";
 import { ExperimentsPayload } from "@/types";
 
 export default async function PostsPage() {

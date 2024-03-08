@@ -1,5 +1,5 @@
 "use client";
-import { monomaniac } from "@/fonts";
+import { monomaniac } from "@/app/fonts";
 import React from "react";
 
 const AudioPlayer = ({ audioTitle, audioFileUrl }) => {

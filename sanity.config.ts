@@ -16,8 +16,13 @@ import {
 	video,
 } from "@/sanity/blog/index";
 import { experiment, spline, tags } from "@/sanity/lab/index";
-import { apiVersion, dataset, projectId, studioUrl } from "@/sanity/lib/api";
-import CustomItem from "@/sanity/ui/CustomItem";
+import {
+	apiVersion,
+	dataset,
+	projectId,
+	studioUrl,
+} from "@/sanity/studio/lib/api";
+import CustomItem from "@/sanity/studio/ui/CustomItem";
 import { visionTool } from "@sanity/vision";
 import { defineConfig } from "sanity";
 import { contentGraphView } from "sanity-plugin-graph-view";
@@ -25,7 +30,7 @@ import { media } from "sanity-plugin-media";
 import { vercelDeployTool } from "sanity-plugin-vercel-deploy";
 import { deskTool } from "sanity/desk";
 
-import CustomField from "./sanity/ui/CustomField";
+import CustomField from "./sanity/studio/ui/CustomField";
 
 const title =
 	process.env.NEXT_PUBLIC_SANITY_PROJECT_TITLE || "Reality Designers";

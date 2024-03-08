@@ -1,7 +1,7 @@
 "use client";
 "use client";
+import { monomaniac, play } from "@/app/fonts";
 import { SanityImage } from "@/components/global/Images";
-import { monomaniac, play } from "@/fonts";
 import { BlockItem, PostsPayload } from "@/types";
 import Link from "next/link";
 import { FC } from "react";

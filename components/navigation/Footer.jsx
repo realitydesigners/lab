@@ -1,5 +1,5 @@
 "use client";
-import { monomaniac } from "@/fonts";
+import { monomaniac } from "@/app/fonts";
 import Spline from "@splinetool/react-spline";
 import Link from "next/link";
 import React, { useState } from "react";

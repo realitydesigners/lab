@@ -4,7 +4,7 @@ import {
 	hookSecret,
 	projectId,
 	token,
-} from "@/sanity/lib/api";
+} from "@/sanity/studio/lib/api";
 
 import {
 	type ClientConfig,
