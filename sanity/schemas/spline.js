@@ -1,6 +1,6 @@
 import { CheckmarkIcon } from "@sanity/icons";
 import { defineField, defineType } from "sanity";
-import tagType from "../schemas/tag";
+import tagType from "./tag";
 
 export default defineType({
 	name: "spline",

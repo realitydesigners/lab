@@ -3,6 +3,7 @@ import {
 	contentBlock,
 	fileBlock,
 	headingBlock,
+	imageCanvasBlock,
 	splineBlock,
 } from "@/sanity/blocks/experiments/index";
 import { apiVersion, dataset, projectId, studioUrl } from "@/sanity/lib/api";
@@ -11,8 +12,8 @@ import {
 	experiment,
 	img,
 	model,
+	posts,
 	quote,
-	spline,
 	tags,
 	video,
 } from "@/sanity/schemas";
@@ -29,7 +30,6 @@ const title =
 	process.env.NEXT_PUBLIC_SANITY_PROJECT_TITLE || "Reality Designers";
 
 export default defineConfig({
-	theme,
 	basePath: studioUrl,
 	projectId: projectId || "",
 	dataset: dataset || "",
@@ -37,12 +37,11 @@ export default defineConfig({
 
 	schema: {
 		types: [
+			posts,
 			img,
-
 			video,
 			quote,
 			category,
-			spline,
 			experiment,
 			model,
 			tags,
@@ -50,6 +49,7 @@ export default defineConfig({
 			splineBlock,
 			fileBlock,
 			contentBlock,
+			imageCanvasBlock,
 		],
 	},
 	form: {
