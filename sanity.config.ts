@@ -1,25 +1,22 @@
 import { theme } from "https://themer.sanity.build/api/hues?default=darkest:000000&primary=59595f;600;lightest:e3e3e3&transparent=7d838c";
 import {
+	category,
 	contentBlock,
 	fileBlock,
 	headingBlock,
 	headingSplineBlock,
 	imageCanvasBlock,
-	splineBlock,
-	teamBlock,
-} from "@/sanity/blocks/experiments/index";
-import { apiVersion, dataset, projectId, studioUrl } from "@/sanity/lib/api";
-import {
-	category,
 	img,
 	model,
 	posts,
 	quote,
+	splineBlock,
 	team,
+	teamBlock,
 	video,
-} from "@/sanity/schemas";
-
+} from "@/sanity/blog/index";
 import { experiment, spline, tags } from "@/sanity/lab/index";
+import { apiVersion, dataset, projectId, studioUrl } from "@/sanity/lib/api";
 import CustomItem from "@/sanity/ui/CustomItem";
 import { visionTool } from "@sanity/vision";
 import { defineConfig } from "sanity";
