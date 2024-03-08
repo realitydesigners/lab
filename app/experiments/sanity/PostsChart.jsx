@@ -2,13 +2,9 @@
 import * as d3 from "d3";
 import React, { useEffect, useRef } from "react";
 
-interface Props {
-	posts: any[]; // Adjust the type as per your actual data structure
-}
-
-const PostsChart: React.FC<Props> = ({ posts }) => {
-	const svgRef = useRef<SVGSVGElement | null>(null);
-	const divRef = useRef<HTMLDivElement | null>(null);
+const PostsChart = ({ posts }) => {
+	const svgRef = useRef(null);
+	const divRef = useRef(null);
 
 	useEffect(() => {
 		if (!svgRef.current || !divRef.current) return;
@@ -21,6 +17,18 @@ const PostsChart: React.FC<Props> = ({ posts }) => {
 
 		processData(svg, posts, width, height);
 
+		const handleResize = () => {
+			if (!svgRef.current || !divRef.current) return;
+
+			const svg = d3.select(svgRef.current);
+			const div = divRef.current;
+
+			const width = div.clientWidth;
+			const height = div.clientHeight;
+
+			processData(svg, posts, width, height);
+		};
+
 		window.addEventListener("resize", handleResize);
 
 		return () => {
@@ -28,30 +36,13 @@ const PostsChart: React.FC<Props> = ({ posts }) => {
 		};
 	}, [posts]);
 
-	const handleResize = () => {
-		if (!svgRef.current || !divRef.current) return;
-
-		const svg = d3.select(svgRef.current);
-		const div = divRef.current;
-
-		const width = div.clientWidth;
-		const height = div.clientHeight;
-
-		processData(svg, posts, width, height);
-	};
-
-	const processData = (
-		svg: any,
-		posts: any[],
-		width: number,
-		height: number,
-	) => {
-		const dailyCounts: { [key: string]: number } = {};
+	const processData = (svg, posts, width, height) => {
+		const dailyCounts = {};
 		const currentDate = new Date();
 		const dateTwoWeeksAgo = new Date(
 			currentDate.getTime() - 14 * 24 * 60 * 60 * 1000,
 		);
-		const dateArray: string[] = [];
+		const dateArray = [];
 
 		for (let i = 0; i < 14; i++) {
 			const date = new Date(
@@ -65,29 +56,13 @@ const PostsChart: React.FC<Props> = ({ posts }) => {
 			);
 		}
 
-		// biome-ignore lint/complexity/noForEach: <explanation>
-		dateArray.forEach((dateString) => {
+		for (const dateString of dateArray) {
 			dailyCounts[dateString] = 0;
-		});
-
-		// biome-ignore lint/complexity/noForEach: <explanation>
-		posts.forEach((post) => {
-			const createdAt = new Date(post._createdAt);
-			const dateString = createdAt.toLocaleDateString("en-US", {
-				month: "short",
-				day: "2-digit",
-			});
-
-			if (dailyCounts[dateString]) {
-				dailyCounts[dateString]++;
-			} else {
-				dailyCounts[dateString] = 1;
-			}
-		});
+		}
 
 		const margin = { top: 10, right: 10, bottom: 40, left: 10 };
 		const svgWidth = width - margin.left - margin.right;
-		const svgHeight = height - margin.top - margin.bottom; // Added margin bottom
+		const svgHeight = height - margin.top - margin.bottom;
 
 		const x = d3
 			.scaleBand()
@@ -101,10 +76,10 @@ const PostsChart: React.FC<Props> = ({ posts }) => {
 			.range([svgHeight, 0]);
 
 		const line = d3
-			.line<any>()
-			.defined((d: any) => !isNaN(d[1]))
+			.line()
+			.defined((d) => !isNaN(d[1]))
 			.x((d) => x(d[0]) + x.bandwidth() / 2)
-			.y((d) => y(d[1]) as number);
+			.y((d) => y(d[1]));
 
 		svg.selectAll("*").remove();
 
@@ -162,7 +137,7 @@ const PostsChart: React.FC<Props> = ({ posts }) => {
 	return (
 		<div
 			ref={divRef}
-			className="h-full w-full items-center justify-center border border-gray-700 px-4  "
+			className="h-full w-full items-center justify-center border border-gray-700 px-4"
 		>
 			<svg ref={svgRef} width="100%" height="100%" />
 		</div>

@@ -1,6 +1,6 @@
 import { defineField } from "sanity";
-import splineType from "../../schemas/spline";
-import tagType from "../../schemas/tag";
+import splineType from "../schemas/spline";
+import tagType from "../schemas/tag";
 
 export default {
 	type: "object",

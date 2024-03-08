@@ -1,9 +1,8 @@
 import { defineField } from "sanity";
-import tagType from "../../lab/schemas/tag";
 
 export default {
 	type: "object",
-	name: "headingBlock",
+	name: "headingSplineBlock",
 	title: "Heading",
 	fields: [
 		defineField({
@@ -14,20 +13,8 @@ export default {
 				list: [
 					{ title: "Dark", value: "dark" },
 					{ title: "Light", value: "light" },
-					{ title: "Transparent", value: "transparent" },
 				],
 			},
-		}),
-		defineField({
-			name: "block",
-			title: "Blocks",
-			type: "array",
-			of: [
-				{
-					type: "splineBlock",
-					title: "Spline Block",
-				},
-			],
 		}),
 		{
 			name: "heading",
@@ -40,23 +27,19 @@ export default {
 			type: "text",
 		},
 		defineField({
-			type: "url",
-			name: "splineUrl",
-			title: "Spline URL",
-			validation: (rule) => rule.uri({ scheme: ["http", "https"] }),
-		}),
-		defineField({
-			name: "video",
-			title: "Video Clip",
-			type: "file",
+			name: "publicationDate",
+			title: "Publication Date",
+			type: "date",
 			options: {
-				accept: "video/*",
+				dateFormat: "DD-MM-YYYY",
 			},
 		}),
+
 		defineField({
-			name: "modelFile",
-			title: "GLB / GLTT File",
-			type: "file",
+			type: "url",
+			name: "url",
+			title: "URL",
+			validation: (rule) => rule.uri({ scheme: ["http", "https"] }),
 		}),
 		defineField({
 			type: "image",
@@ -65,12 +48,26 @@ export default {
 			options: {
 				hotspot: true,
 			},
+			fields: [
+				{
+					name: "alt",
+					title: "Alt Text",
+					type: "string",
+				},
+			],
 		}),
 		defineField({
-			name: "subcategories",
-			title: "Subcategories",
-			type: "array",
-			of: [{ type: "reference", to: [{ type: tagType.name }] }],
+			name: "team",
+			title: "Team",
+			type: "reference",
+			to: [{ type: "team" }],
+		}),
+
+		defineField({
+			name: "category",
+			title: "Category",
+			type: "reference",
+			to: [{ type: "category" }],
 		}),
 	],
 	preview: {
