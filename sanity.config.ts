@@ -1,3 +1,4 @@
+"use client"
 import { theme } from "https://themer.sanity.build/api/hues?default=darkest:000000&primary=59595f;600;lightest:e3e3e3&transparent=7d838c";
 import {
 	category,
@@ -28,7 +29,7 @@ import { defineConfig } from "sanity";
 import { contentGraphView } from "sanity-plugin-graph-view";
 import { media } from "sanity-plugin-media";
 import { vercelDeployTool } from "sanity-plugin-vercel-deploy";
-import { deskTool } from "sanity/desk";
+import {structureTool} from 'sanity/structure'
 
 import CustomField from "./sanity/studio/ui/CustomField";
 
@@ -77,12 +78,10 @@ export default defineConfig({
 		},
 	},
 	plugins: [
-		deskTool({}),
+		structureTool({}),
 
 		visionTool({ defaultApiVersion: apiVersion }),
 
-		// biome-ignore lint/suspicious/noExplicitAny: <explanation>
-		media() as any,
 		// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 		vercelDeployTool() as any,
 	],

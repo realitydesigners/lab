@@ -1,10 +1,10 @@
-import Studio from "./Studio";
+import config from "@/sanity.config";
+import { NextStudio } from "next-sanity/studio";
 
 export const dynamic = "force-static";
 
-export { metadata } from "next-sanity/studio/metadata";
-export { viewport } from "next-sanity/studio/viewport";
+export { metadata, viewport } from "next-sanity/studio";
 
 export default function StudioPage() {
-	return <Studio />;
+	return <NextStudio config={config} />;
 }
