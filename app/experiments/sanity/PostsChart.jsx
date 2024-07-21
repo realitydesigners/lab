@@ -40,24 +40,24 @@ const PostsChart = ({ posts }) => {
 		const dailyCounts = {};
 		const currentDate = new Date();
 		const dateTwoWeeksAgo = new Date(
-			currentDate.getTime() - 14 * 24 * 60 * 60 * 1000,
+			currentDate.getFullYear(),
+			currentDate.getMonth(),
+			currentDate.getDate() - 13 // Adjusting to include today
 		);
 		const dateArray = [];
 
 		for (let i = 0; i < 14; i++) {
 			const date = new Date(
-				dateTwoWeeksAgo.getTime() + i * 24 * 60 * 60 * 1000,
+				dateTwoWeeksAgo.getFullYear(),
+				dateTwoWeeksAgo.getMonth(),
+				dateTwoWeeksAgo.getDate() + i
 			);
-			dateArray.push(
-				date.toLocaleDateString("en-US", {
-					month: "short",
-					day: "2-digit",
-				}),
-			);
-			dailyCounts[date.toLocaleDateString("en-US", {
+			const dateString = date.toLocaleDateString("en-US", {
 				month: "short",
 				day: "2-digit",
-			})] = 0;
+			});
+			dateArray.push(dateString);
+			dailyCounts[dateString] = 0;
 		}
 
 		for (const post of posts) {
