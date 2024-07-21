@@ -54,13 +54,26 @@ const PostsChart = ({ posts }) => {
 					day: "2-digit",
 				}),
 			);
+			dailyCounts[date.toLocaleDateString("en-US", {
+				month: "short",
+				day: "2-digit",
+			})] = 0;
 		}
 
-		for (const dateString of dateArray) {
-			dailyCounts[dateString] = 0;
+		for (const post of posts) {
+			const createdAt = new Date(post._createdAt);
+			const dateKey = createdAt.toLocaleDateString("en-US", {
+				month: "short",
+				day: "2-digit",
+			});
+			if (dailyCounts[dateKey] !== undefined) {
+				dailyCounts[dateKey]++;
+			} else {
+				dailyCounts[dateKey] = 1;
+			}
 		}
 
-		const margin = { top: 10, right: 10, bottom: 40, left: 10 };
+		const margin = { top: 40, right: 40, bottom: 40, left: 0 };
 		const svgWidth = width - margin.left - margin.right;
 		const svgHeight = height - margin.top - margin.bottom;
 
@@ -72,7 +85,7 @@ const PostsChart = ({ posts }) => {
 
 		const y = d3
 			.scaleLinear()
-			.domain([0, d3.max(Object.values(dailyCounts)) || 0])
+			.domain([0, Math.ceil(d3.max(Object.values(dailyCounts)) || 1)])
 			.range([svgHeight, 0]);
 
 		const line = d3
@@ -83,61 +96,47 @@ const PostsChart = ({ posts }) => {
 
 		svg.selectAll("*").remove();
 
-		svg
-			.append("g")
-			.selectAll("line")
-			.data(y.ticks())
-			.enter()
-			.append("line")
-			.attr("x1", 0)
-			.attr("x2", svgWidth)
-			.attr("y1", (d) => y(d))
-			.attr("y2", (d) => y(d))
-			.attr("stroke", "#111")
-			.attr("stroke-width", 1)
-			.attr("shape-rendering", "crispEdges");
+		const g = svg.append("g")
+			.attr("transform", `translate(${margin.left},${margin.top})`);
 
-		svg
-			.append("path")
-			.datum(Object.entries(dailyCounts))
+		// Draw the dots first
+		g.selectAll("dot")
+			.data(dateArray.map((date) => [date, dailyCounts[date] || 0]))
+			.enter()
+			.append("circle")
+			.attr("cx", (d) => x(d[0]) + x.bandwidth() / 2)
+			.attr("cy", (d) => y(d[1]))
+			.attr("r", 4)
+			.attr("fill", "white");
+
+		// Draw the axes
+		g.append("g")
+			.attr("transform", `translate(0,${svgHeight})`)
+			.call(d3.axisBottom(x))
+			.selectAll("text")
+			.style("text-anchor", "middle") // Center the text
+			.attr("dy", "1.5em") // Add more padding for the bottom
+			.style("fill", "#555");
+
+		g.append("g")
+			.attr("transform", `translate(${svgWidth}, 0)`)
+			.call(d3.axisRight(y).ticks(Math.ceil(d3.max(Object.values(dailyCounts)) || 1)))
+			.selectAll("text")
+			.style("fill", "#555");
+
+		// Draw the line last
+		g.append("path")
+			.datum(dateArray.map((date) => [date, dailyCounts[date] || 0]))
 			.attr("fill", "none")
 			.attr("stroke", "white")
 			.attr("stroke-width", 3)
 			.attr("d", line);
-
-		svg
-			.append("g")
-			.attr("transform", `translate(0,${svgHeight})`)
-			.call(d3.axisBottom(x))
-			.selectAll("text")
-			.attr("transform", "rotate(-90)")
-			.style("text-anchor", "end")
-			.attr("y", 0 - margin.top / 0)
-			.style("fill", "#555");
-
-		svg
-			.append("text")
-			.attr("transform", "rotate(-90)")
-			.attr("x", 0 - svgHeight / 2)
-			.attr("dy", "1em")
-			.style("text-anchor", "middle")
-			.style("fill", "#777")
-			.text("Number of Posts");
-
-		svg
-			.append("text")
-			.attr("x", svgWidth / 2)
-			.attr("y", 30 - margin.top / 2)
-			.attr("text-anchor", "middle")
-			.style("font-size", "16px")
-			.style("fill", "#777")
-			.text("Number of Posts Over Time");
 	};
 
 	return (
 		<div
 			ref={divRef}
-			className="h-full w-full items-center justify-center border border-gray-700 px-4"
+			className="h-[400px] w-full items-center justify-center border border-[#181818] my-6"
 		>
 			<svg ref={svgRef} width="100%" height="100%" />
 		</div>
