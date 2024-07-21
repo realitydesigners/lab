@@ -22,9 +22,7 @@ const ContentPage = ({ data }) => {
 				contentTypes={Object.keys(data)}
 				onSelectContentType={onSelectContentType}
 			/>
-
 			<PostsChart posts={data.posts} />
-
 			<DynamicTable data={allData} />
 		</div >
 	);

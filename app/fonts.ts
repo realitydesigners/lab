@@ -3,6 +3,7 @@ import {
 	Play,
 	Space_Grotesk,
 	Staatliches,
+	Russo_One,
 } from "next/font/google";
 
 export const play = Play({
@@ -26,4 +27,9 @@ export const space = Space_Grotesk({
 	weight: ["400", "600"],
 	style: ["normal"],
 	subsets: ["latin"],
+});
+export const russo = Russo_One({
+	weight: ["400"],
+	subsets: ["latin"],
+	display: "swap",
 });
