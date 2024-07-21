@@ -25,9 +25,7 @@ const ContentPage = ({ data }) => {
 			<div className="h-[400px] w-full py-6">
 				<PostsChart posts={data.posts} />
 			</div>
-			<div className="w-full overflow-x-auto border border-gray-700">
-				<DynamicTable data={allData} />
-			</div>
+			<DynamicTable data={allData} />
 		</div>
 	);
 };
