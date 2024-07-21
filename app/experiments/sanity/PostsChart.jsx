@@ -60,18 +60,23 @@ const PostsChart = ({ posts }) => {
 			dailyCounts[dateString] = 0;
 		}
 
-		for (const post of posts) {
-			const createdAt = new Date(post._createdAt);
-			const dateKey = createdAt.toLocaleDateString("en-US", {
-				month: "short",
-				day: "2-digit",
+		posts.forEach(post => {
+			post.block.forEach(block => {
+				const publicationDate = block.publicationDate;
+				if (publicationDate) {
+					const date = new Date(publicationDate);
+					const dateKey = new Date(date.getTime() + date.getTimezoneOffset() * 60000).toLocaleDateString("en-US", {
+						month: "short",
+						day: "2-digit",
+					});
+					if (dailyCounts[dateKey] !== undefined) {
+						dailyCounts[dateKey]++;
+					}
+				}
 			});
-			if (dailyCounts[dateKey] !== undefined) {
-				dailyCounts[dateKey]++;
-			} else {
-				dailyCounts[dateKey] = 1;
-			}
-		}
+		});
+
+		console.log('Daily Counts:', dailyCounts);
 
 		const margin = { top: 40, right: 40, bottom: 40, left: 0 };
 		const svgWidth = width - margin.left - margin.right;
